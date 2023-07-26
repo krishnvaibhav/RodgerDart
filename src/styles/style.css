@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media only screen and (min-width: 480px) {
+    .mobile-content {
+      display: none
+    }
+  }
+
+.bg-color{
+  background:  #B10000;
+}
+
+.txt-color{
+  color: #B10000;
+}
