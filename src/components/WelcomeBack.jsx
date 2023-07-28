@@ -1,19 +1,27 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { useStateValue } from "../context/stateProvider";
 
 const WelcomeBack = () => {
-  const [{}, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
   const navigate = useNavigate();
+  useEffect(() => {
+    if (user) {
+      navigate("/homescreen");
+    }
+  });
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const signIn = async () => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(auth.currentUser);
+      localStorage.setItem("userIDToken", user.user.getIdToken);
+      // console.log(user.user.getIdToken);
+      console.log(auth.currentUser.getIdToken);
       dispatch({
         type: "SET_USER",
         user: user.user,

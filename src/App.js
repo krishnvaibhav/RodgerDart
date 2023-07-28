@@ -4,6 +4,8 @@ import {
   Routes,
   Route,
   Navigate,
+  useNavigate,
+  useNavigation,
 } from "react-router-dom";
 import { useStateValue } from "./context/stateProvider";
 import HomeScreen from "./components/HomeScreen";
@@ -14,31 +16,29 @@ import NewPassword from "./components/NewPassword";
 import OtpScreen from "./components/OtpScreen";
 import WelcomeBack from "./components/WelcomeBack";
 import { auth } from "./firebase";
+import { useEffect, useState } from "react";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
+  const [loggedin, SetLogin] = useState(false);
+
+  // console.log(localStorage.getItem("userIDToken"));
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
+      SetLogin(true);
       dispatch({
         type: "SET_USER",
         user: user,
       });
     } else {
+      SetLogin(false);
       dispatch({
         type: "SET_USER",
         user: null,
       });
     }
   });
-
-  const isAuthenticated = () => {
-    return !!user;
-  };
-
-  const SecureRoute = ({ element, ...rest }) => {
-    return isAuthenticated() ? element : <Navigate to="/" />;
-  };
 
   return (
     <Router>
@@ -50,11 +50,9 @@ function App() {
           <Route exact path="/newpassword" element={<NewPassword />} />
           <Route exact path="/otpscreen" element={<OtpScreen />} />
           <Route exact path="/getotp" element={<GetOtp />} />
-          <Route
-            exact
-            path="/homescreen"
-            element={<SecureRoute element={<HomeScreen />} />}
-          />
+          {loggedin && (
+            <Route exact path="/homescreen" element={<HomeScreen />} />
+          )}
         </Routes>
       </div>
     </Router>

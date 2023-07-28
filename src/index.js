@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <StateProvider reducer={reducer} initialState={initialState}>
-      <HomeScreen />
+      <App />
     </StateProvider>
   </React.StrictMode>
 );

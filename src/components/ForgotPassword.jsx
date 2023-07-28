@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ForgotPassword = () => {
   const navigator = useNavigate();
   const [number, setNumber] = useState("");
-  const [{}, dispatch] = useStateValue();
+  const [{ name }, dispatch] = useStateValue();
   const handleDispatch = () => {
     try {
       if (!number) {
@@ -14,6 +14,8 @@ const ForgotPassword = () => {
         console.log("Please enter a phone number");
         return;
       }
+
+      console.log(name);
 
       // The hang issue
 

@@ -4,7 +4,6 @@ export const initialState = {
   number: null,
   name: null,
 };
-
 const reducer = (state, action) => {
   switch (action.type) {
     case "SET_USER":
