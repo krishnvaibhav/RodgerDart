@@ -15,3 +15,14 @@
 .txt-color{
   color: #B10000;
 }
+
+.scrollable-x-axis {
+  overflow-x:scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -ms-overflow-style: none; 
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
