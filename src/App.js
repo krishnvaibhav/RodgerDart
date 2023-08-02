@@ -16,7 +16,9 @@ import NewPassword from "./components/NewPassword";
 import OtpScreen from "./components/OtpScreen";
 import WelcomeBack from "./components/WelcomeBack";
 import { auth } from "./firebase";
+import BillNavbar from "./components/BillNavbar";
 import { useEffect, useState } from "react";
+import BillScreen from "./components/BillScreen";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
@@ -44,7 +46,7 @@ function App() {
     <Router>
       <div className="mobile-content">
         <Routes>
-          <Route exact path="/" element={<WelcomeBack />} />
+          <Route exact path="/" element={<BillScreen />} />
           <Route exact path="/createaccount" element={<CreateAccount />} />
           <Route exact path="/forgotpassword" element={<ForgotPassword />} />
           <Route exact path="/newpassword" element={<NewPassword />} />

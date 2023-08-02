@@ -20,9 +20,11 @@ const ForgotPassword = () => {
       // The hang issue
 
       // dispatch({
-      //   type: "SET_NUMBER",
-      //   number: number,
+      //   type: "SET_FNUMBER",
+      //   Fnumber: number,
       // });
+
+      console.log("done")
 
       navigator("/getotp");
     } catch (err) {
@@ -69,7 +71,7 @@ const ForgotPassword = () => {
           onClick={() => handleDispatch()}
           className="bg-color p-3 m-3 w-80 rounded text-white"
         >
-          Countinue
+          Continue
         </button>
       </div>
     </div>

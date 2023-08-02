@@ -3,6 +3,7 @@ export const initialState = {
   id: null,
   number: null,
   name: null,
+  Fnumber:null,
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -21,6 +22,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         number: action.number,
+      };
+    case "SET_FNUMBER":
+      return {
+        ...state,
+        Fnumber: action.Fnumber,
       };
     case "SET_NAME":
       return {
