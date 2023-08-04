@@ -1,0 +1,14 @@
+.scrollableXaxis {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.innerContainer {
+  display: inline-block;
+}

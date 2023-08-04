@@ -4,7 +4,6 @@ import addressimg from "../assets/address.png";
 import "../styles/style.css";
 import deleteimg from "../assets/trash.png";
 import editimg from "../assets/editimg.png";
-import { Divider } from "@mui/material";
 
 const AddressScreeen = () => {
   const addressList = [
@@ -40,7 +39,9 @@ const AddressScreeen = () => {
               >
                 <div className="">
                   <p style={{ fontSize: 16, fontWeight: 400 }}>{el.name}</p>
-                  <p style={{ color: "#7E7E7E", fontSize: 16, fontWeight: 400 }}>
+                  <p
+                    style={{ color: "#7E7E7E", fontSize: 16, fontWeight: 400 }}
+                  >
                     {el.address}
                   </p>
                 </div>

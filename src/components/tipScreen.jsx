@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import BillNavbar from "./BillNavbar";
 import tipImg from "../assets/tipimg.png";
+import { useNavigate } from "react-router-dom";
 
 const TipScreen = () => {
+  const navigate = useNavigate();
+
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState("");
 
-  const tipOptions = ['N250', 'N300', 'N350', 'N400'];
+  const tipOptions = ["N250", "N300", "N350", "N400"];
 
   const handleTipSelection = (tip) => {
     if (customTip !== "") {
@@ -27,8 +30,11 @@ const TipScreen = () => {
 
   return (
     <div>
-      <BillNavbar title="Add a Tip" />
-      <div className="flex flex-col items-center justify-between" style={{height:"70vh"}}>
+      <BillNavbar title="Add a Tip" location="checkout" />
+      <div
+        className="flex flex-col items-center justify-between"
+        style={{ height: "70vh" }}
+      >
         <div>
           <div>
             <div className="flex flex-col items-center justify-center">
@@ -68,7 +74,14 @@ const TipScreen = () => {
           </div>
         </div>
         <div>
-          <button onClick={handleTipSubmit} className="p-3 text-white w-60 rounded" style={{backgroundColor:"#B10000"}}>
+          <button
+            onClick={() => {
+              handleTipSubmit();
+              navigate("/paymentsuccess");
+            }}
+            className="p-3 text-white w-60 rounded"
+            style={{ backgroundColor: "#B10000" }}
+          >
             Submit
           </button>
         </div>
@@ -87,7 +100,7 @@ const buttonStyle = {
 
 const selectedStyle = {
   ...buttonStyle,
-  border:"1px solid red",
+  border: "1px solid red",
 };
 
 const customInputStyle = {

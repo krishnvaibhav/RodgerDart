@@ -27,6 +27,11 @@ import AddAddress from "./components/AddAddress";
 import MyCards from "./components/MyCards";
 import AddCard from "./components/AddCard";
 import MyProfile from "./components/MyProfile";
+import BrowseScreen from "./components/BrowseScreen";
+import Restaurants from "./components/Restaurants";
+import RestuarantCardScreen from "./components/RestaurantsCardScreen";
+import CartScreen from "./components/CartScreen";
+import OrderHistory from "./components/HomeScreenComponent/OrderHistory";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
@@ -70,7 +75,18 @@ function App() {
           <Route exact path="/myprofile" element={<MyProfile />} />
           <Route exact path="/paymentsuccess" element={<PaymentSuccess />} />
           {loggedin && (
-            <Route exact path="/homescreen" element={<HomeScreen />} />
+            <>
+              <Route exact path="/homescreen" element={<HomeScreen />} />
+              <Route exact path="/orderhistory" element={<OrderHistory />} />
+              <Route exact path="/browscreen" element={<BrowseScreen />} />
+              <Route exact path="/restaurantscreen" element={<Restaurants />} />
+              <Route
+                exact
+                path="/restCard"
+                element={<RestuarantCardScreen />}
+              />
+              <Route exact path="/cartscreen" element={<CartScreen />} />
+            </>
           )}
         </Routes>
       </div>

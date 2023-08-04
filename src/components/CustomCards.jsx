@@ -17,7 +17,7 @@ const style = {
   borderRadius: 3,
 };
 
-const PaymentForm = () => {
+const PaymentForm = (props) => {
   const [cvc, setCvc] = useState("");
   const [expiry, setExpiry] = useState("");
   const [focus, setFocus] = useState("");

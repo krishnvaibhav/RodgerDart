@@ -7,6 +7,8 @@ import editimg from "../assets/editimg.png";
 import CustomCards from "./CustomCards";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
+import { Icon } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 const MyCards = () => {
   const cardList = [
@@ -51,8 +53,14 @@ const MyCards = () => {
                     expiry={el.expiry}
                     name={el.name}
                     number={el.cardnumber}
+                    preview={true}
                   />
-                  <img src={deleteimg} alt="" className="m-3" style={{height:25,width:25}} />
+                  <img
+                    src={deleteimg}
+                    alt=""
+                    className="m-3"
+                    style={{ height: 25, width: 25 }}
+                  />
                 </div>
               );
             })}
@@ -64,12 +72,21 @@ const MyCards = () => {
             </div>
           )}
         </div>
-        <div>
+        <div
+          style={{ width: "100%" }}
+          className="flex items-center justify-center"
+        >
           <button
-            className=" m-3 p-3 text-white w-60 rounded"
-            style={{ backgroundColor: "#B10000" }}
+            className="flex items-center justify-center p-3 text-white rounded"
+            style={{
+              borderColor: "#B10000",
+              borderWidth: 2,
+              color: "#B10000",
+              width: "83%",
+            }}
           >
-            Add Card
+            <AddIcon />
+            <p className="ml-2">Add Card</p>
           </button>
         </div>
       </div>

@@ -1,18 +1,73 @@
-import React, { Image } from "react";
-
-import bagImg from "../assets/bag-2.png";
-
-import { HiOutlineBars4 } from "react-icons/hi2";
-import { BsFillHandbagFill } from "react-icons/bs";
+import React, { useEffect, useRef, useState } from "react";
+import TopBar from "./HomeScreenComponent/TopBar";
+import SearchBar from "./HomeScreenComponent/SearchBar";
+import WelcomeCard from "./HomeScreenComponent/WelcomeCard";
+import OfferScreen from "./HomeScreenComponent/OfferScreen";
+import CategoryScreen from "./HomeScreenComponent/CategoryScreen";
+import MainCardScreen from "./HomeScreenComponent/MainCardScreen";
+import BottomContainer from "./HomeScreenComponent/BottomContainer";
+import Icon from "./HomeScreenComponent/ImagePath";
 
 const HomeScreen = () => {
+  const [userName, setUserName] = useState("Nelson");
+  const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  const width = useRef(deviceWidth / 2 + deviceWidth / 3);
+
   return (
-    <div className="p-4 pb-1 bg-red-400">
-      <div className="flex flex-row">
-        <HiOutlineBars4 size={25} />
-        {/* <img src={bagImg} style={{ width: 25 }} /> */}
-        <BsFillHandbagFill size={25} className="flex-1" />
+    <div
+      style={{
+        height: "100vh", // Set the height of the container to fill the viewport
+        overflowY: "hidden", // Hide vertical scrollbar for the entire container
+        position: "relative", // Set position to relative for the fixed top bar
+        paddingTop: "40px", // Add padding to create space for the TopBar
+      }}
+    >
+      <TopBar
+        icon={Icon.MenuIc}
+        cart={Icon.cartIc}
+        style={{
+          position: "fixed", // Set position to fixed to make the top bar fixed
+          top: 0, // Place the top bar at the top of the viewport
+          width: "100%", // Set the width to span the entire viewport
+        }}
+      />
+      <div
+        style={{
+          height: "calc(100vh - 120px)", // Calculate the height of the scrollable content area (subtract the height of the TopBar and BottomContainer)
+          overflowY: "scroll", // Enable vertical scrolling for the content area
+          paddingBottom: "20px", // Add padding to create space for the BottomContainer
+        }}
+      >
+        <div className="p-4 pb-1">
+          <div
+            style={{
+              overflowY: "scroll",
+            }}
+          >
+            <WelcomeCard statename={userName} />
+            <SearchBar width={width} />
+            <OfferScreen />
+            <CategoryScreen width={width} />
+            <MainCardScreen title="Eatery" />
+            <MainCardScreen title="Gffts" />
+            <MainCardScreen title="Grocery" />
+            <MainCardScreen title="Pastries" />
+            <MainCardScreen title="Pharmacy" />
+          </div>
+        </div>
       </div>
+      <BottomContainer width={deviceWidth} />
     </div>
   );
 };

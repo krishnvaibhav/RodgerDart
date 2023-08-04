@@ -18,12 +18,13 @@ import bankimg from "../assets/mdi_bank-outline.png";
 import cardimg from "../assets/Credit_Card_01.png";
 import paystackimg from "../assets/paystack.png";
 import Items from "./Items";
-import CustomCards from "./CustomCards"
+import CustomCards from "./CustomCards";
+import { useNavigate } from "react-router-dom";
 
 const BillCheckOut = () => {
   const [address, setAddress] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
-  const [showBankDetails, setShowBankDetails] = useState(false); 
+  const [showBankDetails, setShowBankDetails] = useState(false);
 
   const handleChange = (event) => {
     setAddress(event.target.value);
@@ -31,7 +32,7 @@ const BillCheckOut = () => {
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
-    setShowBankDetails(event.target.value === "bank"); 
+    setShowBankDetails(event.target.value === "bank");
   };
 
   const addressList = [
@@ -42,6 +43,7 @@ const BillCheckOut = () => {
     "987 Pine Road, Hamletville, New Zealan",
   ];
 
+  const navigate = useNavigate();
   return (
     <div>
       <div className="flex items-center justify-center w-4/5 m-auto">
@@ -78,6 +80,9 @@ const BillCheckOut = () => {
             Delivery address
           </p>
           <button
+            onClick={() => {
+              navigate("/addAddress");
+            }}
             style={{
               fontSize: 10,
               color: "#0230B1",
@@ -174,17 +179,16 @@ const BillCheckOut = () => {
             }}
           >
             <div className="flex m-1">
-              <img src={bankimg} alt="" style={{ marginRight: 10 }} />
-              <p style={{ fontSize: 12, fontWeight: 400 }}>Bank Transfer</p>
+              <img src={cardimg} alt="" style={{ marginRight: 10 }} />
+              <p style={{ fontSize: 12, fontWeight: 400 }}>Debit Card</p>
             </div>
           </div>
-          
         </label>
         {showBankDetails && (
-            <div style={{ margin: 20}}>
-              <CustomCards/>
-            </div>
-          )}
+          <div style={{ margin: 20 }}>
+            <CustomCards />
+          </div>
+        )}
         <label
           className="flex items-center justify-center"
           style={{ width: "100%" }}
@@ -207,8 +211,8 @@ const BillCheckOut = () => {
             }}
           >
             <div className="flex m-1">
-              <img src={cardimg} alt="" style={{ marginRight: 10 }} />
-              <p style={{ fontSize: 12, fontWeight: 400 }}>Debit card</p>
+              <img src={bankimg} alt="" style={{ marginRight: 10 }} />
+              <p style={{ fontSize: 12, fontWeight: 400 }}>Bank Transfer</p>
             </div>
           </div>
         </label>

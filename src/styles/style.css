@@ -26,3 +26,52 @@
     display: none;
   }
 }
+
+.inner-container {
+  display: inline-block;
+}
+
+.places-autocomplete-container {
+  position: relative;
+  display: inline-block;
+  width: "100%";
+}
+
+/* Style for the input */
+.places-autocomplete-input {
+  width: "100%";
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  outline: none;
+}
+
+/* Style for the suggestions dropdown */
+.places-autocomplete-suggestions {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Style for each suggestion item */
+.places-autocomplete-suggestion {
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Style for the selected suggestion item */
+.places-autocomplete-suggestion:hover {
+  background-color: #f5f5f5;
+}
+
+/* Style for the loading indicator */
+.places-autocomplete-loading {
+  padding: 8px;
+}
