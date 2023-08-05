@@ -65,15 +65,7 @@ function App() {
           <Route exact path="/newpassword" element={<NewPassword />} />
           <Route exact path="/otpscreen" element={<OtpScreen />} />
           <Route exact path="/getotp" element={<GetOtp />} />
-          <Route exact path="/checkout" element={<BillScreen />} />
-          <Route exact path="/tipscreen" element={<TipScreen />} />
-          <Route exact path="/trackorder" element={<Trackorder />} />
-          <Route exact path="/addressscreen" element={<AddressScreeen />} />
-          <Route exact path="/addAddress" element={<AddAddress />} />
-          <Route exact path="/mycards" element={<MyCards />} />
-          <Route exact path="/addcard" element={<AddCard />} />
-          <Route exact path="/myprofile" element={<MyProfile />} />
-          <Route exact path="/paymentsuccess" element={<PaymentSuccess />} />
+
           {loggedin && (
             <>
               <Route exact path="/homescreen" element={<HomeScreen />} />
@@ -84,6 +76,19 @@ function App() {
                 exact
                 path="/restCard"
                 element={<RestuarantCardScreen />}
+              />
+              <Route exact path="/checkout" element={<BillScreen />} />
+              <Route exact path="/tipscreen" element={<TipScreen />} />
+              <Route exact path="/trackorder" element={<Trackorder />} />
+              <Route exact path="/addressscreen" element={<AddressScreeen />} />
+              <Route exact path="/addAddress" element={<AddAddress />} />
+              <Route exact path="/mycards" element={<MyCards />} />
+              <Route exact path="/addcard" element={<AddCard />} />
+              <Route exact path="/myprofile" element={<MyProfile />} />
+              <Route
+                exact
+                path="/paymentsuccess"
+                element={<PaymentSuccess />}
               />
               <Route exact path="/cartscreen" element={<CartScreen />} />
             </>

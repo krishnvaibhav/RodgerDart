@@ -10,6 +10,7 @@ const WelcomeBack = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (user) {
+      console.log(auth.currentUser);
       navigate("/homescreen");
     }
   });
