@@ -16,6 +16,11 @@ import rating from "../../assets/stars.png";
 import shoppingCart from "../../assets/shoppingCart.png";
 import backArrow from "../../assets/backArrow.png";
 import menu from "../../assets/textalign-left.png";
+import selectBrowser from "../../assets/selectBrowseIcon.png";
+import notifyIcon from "../../assets/notification.png";
+import selectOrder from "../../assets/selectOrderIcon.png";
+import emptyCart from "../../assets/emptyCart.svg";
+import FoodImage from "../../assets/FoodImage.png";
 
 export default {
   Eats: Eatery,
@@ -36,4 +41,9 @@ export default {
   BackArrow: backArrow,
   MenuIc: menu,
   cartIc: cartIc,
+  selBrowScreen: selectBrowser,
+  NotificationIc: notifyIcon,
+  selectOrder: selectOrder,
+  EmptyCart: emptyCart,
+  FoodImage: FoodImage,
 };

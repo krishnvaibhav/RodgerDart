@@ -28,8 +28,8 @@ import MyCards from "./components/MyCards";
 import AddCard from "./components/AddCard";
 import MyProfile from "./components/MyProfile";
 import BrowseScreen from "./components/BrowseScreen";
-import Restaurants from "./components/Restaurants";
-import RestuarantCardScreen from "./components/RestaurantsCardScreen";
+import Store from "./components/Store";
+import RestuarantCardScreen from "./components/StoreCard";
 import CartScreen from "./components/CartScreen";
 import OrderHistory from "./components/HomeScreenComponent/OrderHistory";
 import OrderDetails from "./components/HomeScreenComponent/OrderDetails";
@@ -73,12 +73,13 @@ function App() {
               <Route exact path="/orderhistory" element={<OrderHistory />} />
               <Route exact path="/orderdetails" element={<OrderDetails />} />
               <Route exact path="/browscreen" element={<BrowseScreen />} />
-              <Route exact path="/restaurantscreen" element={<Restaurants />} />
+              <Route exact path="/storescreen" element={<Store />} />
               <Route
                 exact
-                path="/restCard"
+                path={`/restCard`}
                 element={<RestuarantCardScreen />}
               />
+              <Route exact path="/cartscreen" element={<CartScreen />} />
               <Route exact path="/checkout" element={<BillScreen />} />
               <Route exact path="/tipscreen" element={<TipScreen />} />
               <Route exact path="/trackorder" element={<Trackorder />} />
