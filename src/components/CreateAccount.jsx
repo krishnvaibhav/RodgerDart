@@ -121,7 +121,7 @@ const CreateAccount = () => {
           Countinue
         </button>
         <p>
-          Already have an account ?{" "}
+          Already have an account ?
           <span className="txt-color">
             <Link to={"/"}>SIGN IN</Link>
           </span>

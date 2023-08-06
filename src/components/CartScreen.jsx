@@ -1,20 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TopBar from "./HomeScreenComponent/TopBar";
 import Icon from "./HomeScreenComponent/ImagePath.js";
 import { RxCrossCircled } from "react-icons/rx";
+import { auth, db, rootRef, storage } from "../firebase";
+import { getDocs, collection } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
 
 const CartScreen = (props) => {
-  const [cart, setCart] = useState({
-    items: [
-      {
-        title: "local Food",
-        image: Icon.FoodImage,
-        description: "Seafood okro with 3 wraps of semo ",
-        price: 5000,
-        numberOf: 1,
-      },
-    ],
+  const [cartId, setCartId] = useState([]);
+  const itemRef = collection(db, "users");
+  const cartRef = collection(db, "item");
+
+  getDocs(itemRef).then((snapshot) => {
+    let user = auth.currentUser.uid;
+    snapshot.docs.forEach((doc) => {
+      if (doc.id === user) {
+        setCartId(doc.data().cart_item_id);
+      }
+    });
   });
+
+  const [cart, setCart] = useState({
+    items: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        getDocs(cartRef).then((snapshot) => {
+          const data = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            title: doc.data().name,
+            price: doc.data().price,
+            numberOf: doc.data().quant,
+            description: doc.data().description,
+            image: doc.data().img,
+          }));
+          setCart({ items: data });
+        });
+
+        // console.log(data);
+      } catch (error) {
+        // Handle any potential errors here
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+    // const imageRef = ref(rootRef, cart.items.image);
+
+    // const imageUrl = getDownloadURL(rootRef.child(cart.items.image));
+
+    // setCart((prev) => ({
+    //   ...prev,
+    //   imageUrl: imageUrl,
+    // }));
+    // console.log(cart);
+  }, []);
 
   const handleIncrement = (index) => {
     const updatedCart = { ...cart };
@@ -29,6 +71,8 @@ const CartScreen = (props) => {
       setCart(updatedCart);
     }
   };
+  // const itemImage = ref(rootRef, cart.items.image);
+
   return (
     <div>
       <TopBar
@@ -94,7 +138,7 @@ const CartScreen = (props) => {
               style={{ height: "100vh" }}
             >
               <div className="flex space-x-4">
-                <img className="w-24" src={item.image} />
+                <img className="w-24" src={Icon.FoodImage} />
                 <div
                   className="flex flex-col"
                   style={{
