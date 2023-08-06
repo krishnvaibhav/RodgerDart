@@ -3,30 +3,35 @@ import BillNavbar from "./BillNavbar";
 import profile from "../assets/profile.png";
 import { Fab } from "@mui/material";
 import CallIcon from "@mui/icons-material/Call";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-
+import GoogleMapReact from "google-map-react";
+import { Marker } from "@react-google-maps/api";
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
 const Trackorder = () => {
   const mapStyles = {
     height: "400px",
     width: "100%",
   };
-  const defaultCenter = {
-    lat: 40.7128, // Latitude
-    lng: -74.006, // Longitude
+
+  const defaultProps = {
+    center: {
+      lat: 28.6832252,
+      lng: 77.409954,
+    },
+    zoom: 16,
   };
   return (
     <div style={{ height: "100vh" }}>
-      <BillNavbar title="Payment" />
-      <div >
-        <LoadScript googleMapsApiKey="AIzaSyDesOie1K0-Ho2y_Aj35-FNI8L2Jk8P-qg">
-          <GoogleMap
-            mapContainerStyle={mapStyles}
-            center={defaultCenter}
-            zoom={10}
-          >
-            <Marker position={defaultCenter} />
-          </GoogleMap>
-        </LoadScript>
+      <BillNavbar title="Payment" location="homescreen" />
+      <div style={mapStyles}>
+        <GoogleMapReact
+          bootstrapURLKeys={{
+            key: "AIzaSyDesOie1K0-Ho2y_Aj35-FNI8L2Jk8P-qg",
+          }}
+          defaultCenter={defaultProps.center}
+          defaultZoom={defaultProps.zoom}
+        >
+          <Marker />
+        </GoogleMapReact>
       </div>
       <div className=" m-3 p-3">
         <p style={{ fontSize: 12, color: "#000000" }}>Delivery Time</p>

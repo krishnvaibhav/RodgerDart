@@ -3,7 +3,8 @@ export const initialState = {
   id: null,
   number: null,
   name: null,
-  Fnumber:null,
+  Fnumber: null,
+  Rid: null,
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -32,6 +33,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         name: action.name,
+      };
+    case "SET_RESTAURANT":
+      return {
+        ...state,
+        Rid: action.Rid,
       };
 
     default:

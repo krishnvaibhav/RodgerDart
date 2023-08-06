@@ -5,6 +5,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { auth, db, rootRef, storage } from "../firebase";
 import { getDocs, collection } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
+import { Button } from "@mui/material";
 
 const CartScreen = (props) => {
   const [cartId, setCartId] = useState([]);
@@ -132,11 +133,7 @@ const CartScreen = (props) => {
       ) : (
         <div>
           {cart.items.map((item, key) => (
-            <div
-              key={key}
-              className="flex flex-col pt-20 pl-10 space-y-20"
-              style={{ height: "100vh" }}
-            >
+            <div key={key} className="flex flex-col pt-20 pl-10 space-y-20">
               <div className="flex space-x-4">
                 <img className="w-24" src={Icon.FoodImage} />
                 <div
@@ -180,6 +177,13 @@ const CartScreen = (props) => {
               </div>
             </div>
           ))}
+          <Button
+            onClick={() => {
+              console.log(cart);
+            }}
+          >
+            click
+          </Button>
         </div>
       )}
     </div>

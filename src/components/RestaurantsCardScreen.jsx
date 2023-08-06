@@ -58,6 +58,7 @@ const RestuarantCardScreen = ({ navigate }) => {
           >
             <SearchBar width={width} />
             <CategoryScreen width={width} />
+
             <ItemCard
               image={Icon.MegaChicken}
               foodName="Efro-riro and Eba"

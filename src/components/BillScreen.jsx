@@ -1,14 +1,14 @@
-import React from 'react';
-import BillNavbar from './BillNavbar';
-import BillBottomNav from './BillBottomNav';
-import BillCheckOut from './BillCheckOut';
+import React from "react";
+import BillNavbar from "./BillNavbar";
+import BillBottomNav from "./BillBottomNav";
+import BillCheckOut from "./BillCheckOut";
 
 const BillScreen = () => {
   return (
     <div>
-      <BillNavbar title="Checkout" />
-      <BillCheckOut/>
-      <BillBottomNav/>
+      <BillNavbar title="Checkout" location="homescreen" />
+      <BillCheckOut />
+      <BillBottomNav />
     </div>
   );
 };

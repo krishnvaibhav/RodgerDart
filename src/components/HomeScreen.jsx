@@ -9,6 +9,7 @@ import BottomContainer from "./HomeScreenComponent/BottomContainer";
 import Icon from "./HomeScreenComponent/ImagePath";
 import { CSSTransition } from "react-transition-group";
 import "./NotificationCard.css";
+import Drawer from "@mui/material/Drawer";
 
 const HomeScreen = () => {
   const [userName, setUserName] = useState("Nelson");

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import Sheet from "react-modal-sheet";
 import { easeIn } from "framer-motion";
+import { collection } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const MainCards = (props) => {
   const [favItem, setFavItem] = useState(false);
@@ -15,6 +17,9 @@ const MainCards = (props) => {
   const [isFfocus, setFFocus] = useState(false);
   const [popUpval, setPopUpVal] = useState(380);
   const navigate = useNavigate();
+
+  const itemRef = collection(db, "users");
+
   return (
     <div>
       <button

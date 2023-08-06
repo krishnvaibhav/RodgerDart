@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Icon from "./ImagePath";
 import { useNavigate } from "react-router-dom";
+import { useStateValue } from "../../context/stateProvider";
 
 const MainCards = (props) => {
   const [favItem, setFavItem] = useState(false);
   const [rating, setRating] = useState();
   const navigate = useNavigate();
+  const [{}, dispatch] = useStateValue();
+
+  const HandleCardClick = () => {
+    dispatch({
+      type: "SET_RESTAURANT",
+      Rid: props.foodName,
+    });
+    navigate("/restCard");
+  };
 
   const performNotification = () => {
     props.fav(true);
@@ -16,10 +26,10 @@ const MainCards = (props) => {
     }, 2000);
   };
   return (
-    <div>
+    <div className="mr-4">
       <div className="relative">
         <div
-          className="rounded-full absolute bg-white p-1 right-0 mr-2 mt-2"
+          className="rounded-full absolute bg-white p-1 right-0 "
           onClick={() => {
             setFavItem(!favItem);
             performNotification();
@@ -42,19 +52,14 @@ const MainCards = (props) => {
             />
           )}
         </div>
-        <button
-          onClick={() => {
-            navigate("/restCard");
-          }}
-        >
-          <img src={props.image} width={150} />
+        <button onClick={HandleCardClick}>
+          <img src={props.image} style={{ width: 150, height: 100 }} alt="" />
         </button>
       </div>
       <div className="flex flex-col">
         <h2 className=" font-normal text-base ">{props.foodName}</h2>
         <div>
           <img src={Icon.RatingIcon} alt="" />
-          <p>{}</p>
         </div>
       </div>
     </div>
