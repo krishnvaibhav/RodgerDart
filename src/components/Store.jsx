@@ -7,9 +7,8 @@ import CategoryScreen from "./HomeScreenComponent/CategoryScreen";
 import MainCardScreen from "./HomeScreenComponent/MainCardScreen";
 import BottomContainer from "./HomeScreenComponent/BottomContainer";
 import Icon from "./HomeScreenComponent/ImagePath";
-import { CSSTransition } from "react-transition-group";
-import "./NotificationCard.css";
-const BrowseScreen = ({ navigate }) => {
+
+const Restuarants = () => {
   const [userName, setUserName] = useState("Nelson");
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
 
@@ -25,8 +24,6 @@ const BrowseScreen = ({ navigate }) => {
   }, []);
   const width = useRef(deviceWidth / 2 + deviceWidth / 3);
 
-  const [favTime, setFavTime] = useState(false);
-
   return (
     <div
       style={{
@@ -36,48 +33,8 @@ const BrowseScreen = ({ navigate }) => {
         paddingTop: "40px", // Add padding to create space for the TopBar
       }}
     >
-      <CSSTransition
-        in={favTime}
-        timeout={300}
-        classNames="notification"
-        unmountOnExit
-      >
-        {/* The div with the sliding animation */}
-        <div
-          className="topNotification"
-          style={{
-            position: "absolute",
-            backgroundColor: "#F2CECE",
-            width: "92%",
-            height: "10%",
-            top: "10px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: 10,
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              margin: 30,
-            }}
-          >
-            <div className="flex flex-row items-center space-x-3">
-              <img
-                className="self-center"
-                src={Icon.NotificationIc}
-                alt="Notification Icon"
-              />
-              <h1 className="">Added to favorites.</h1>
-            </div>
-          </div>
-        </div>
-      </CSSTransition>
       <TopBar
+        title="Restuarant"
         icon={Icon.MenuIc}
         cart={Icon.cartIc}
         width={deviceWidth}
@@ -102,11 +59,11 @@ const BrowseScreen = ({ navigate }) => {
           >
             <SearchBar width={width} />
             <CategoryScreen width={width} />
-            <MainCardScreen title="Eatery" fav={setFavTime} />
-            <MainCardScreen title="Gffts" fav={setFavTime} />
-            <MainCardScreen title="Grocery" fav={setFavTime} />
-            <MainCardScreen title="Pastries" fav={setFavTime} />
-            <MainCardScreen title="Pharmacy" fav={setFavTime} />
+            <MainCardScreen title="Eatery" />
+            <MainCardScreen title="Gffts" />
+            <MainCardScreen title="Grocery" />
+            <MainCardScreen title="Pastries" />
+            <MainCardScreen title="Pharmacy" />
           </div>
         </div>
       </div>
@@ -115,4 +72,4 @@ const BrowseScreen = ({ navigate }) => {
   );
 };
 
-export default BrowseScreen;
+export default Restuarants;

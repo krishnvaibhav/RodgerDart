@@ -7,9 +7,10 @@ const BottomContainer = (props) => {
   const location = useLocation();
 
   const isHomeScreen = location.pathname === "/homescreen";
-  const isRestScreen = location.pathname === "/restaurantscreen";
-  const isBrowScreen = location.pathname === "/homescreen";
-  const isOrdeScreen = location.pathname === "/homescreen";
+  const isRestScreen =
+    location.pathname === "/storescreen" || location.pathname === "/restCard";
+  const isBrowScreen = location.pathname === "/browscreen";
+  const isOrdeScreen = location.pathname === "/orderhistory";
   return (
     <div
       className="flex justify-around border-t-2 pt-3"
@@ -35,7 +36,7 @@ const BottomContainer = (props) => {
         <button
           onClick={() => {
             console.log("log");
-            navigate("/restaurantscreen");
+            navigate("/storescreen");
           }}
         >
           <img
@@ -52,7 +53,10 @@ const BottomContainer = (props) => {
             navigate("/browscreen");
           }}
         >
-          <img src={Icon.BrowseIcon} className="w-7" />
+          <img
+            src={isBrowScreen ? Icon.selBrowScreen : Icon.BrowseIcon}
+            className="w-7"
+          />
         </button>
         <h2 className="text-xs">Browse</h2>
       </div>
@@ -60,10 +64,13 @@ const BottomContainer = (props) => {
         <button
           onClick={() => {
             console.log("log");
-            navigate("/homescreen");
+            navigate("/orderhistory");
           }}
         >
-          <img src={Icon.OrderIcon} className="w-7" />
+          <img
+            src={isOrdeScreen ? Icon.selectOrder : Icon.OrderIcon}
+            className="w-7"
+          />
         </button>
         <h2 className="text-xs">Order</h2>
       </div>

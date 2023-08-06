@@ -1,0 +1,22 @@
+/* Add this to your CSS file */
+.notification-enter {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.notification-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.notification-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notification-exit-active {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}

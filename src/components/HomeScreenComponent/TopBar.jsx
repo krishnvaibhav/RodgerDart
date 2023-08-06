@@ -18,7 +18,7 @@ const TopBar = (props) => {
         top: 0,
         width: "100%",
         display: "flex",
-        padding: "10px",
+        padding: "8px 12px",
         backgroundColor: "#ffffff",
       }}
     >
@@ -26,18 +26,26 @@ const TopBar = (props) => {
         <button
           onClick={() => {
             console.log("log");
-            navigate("/browscreen");
+            navigate(props.navigationPath);
           }}
         >
-          <img src={menuCard} alt="menu" />
+          <img src={props.icon} alt="menu" />
         </button>
       </div>
-      <h1>{title}</h1>
-      <div className="flex-1 flex justify-end">
+      <h1 className="font-semibold" style={{ textAlign: "center", flex: 1 }}>
+        {title}
+      </h1>
+      {props.cart ? (
         <div className="rounded-full w-8 h-8 flex items-center justify-center">
-          <img src={props.cart} alt="cart" />
+          <button
+            onClick={() => {
+              navigate("/cartscreen");
+            }}
+          >
+            <img src={props.cart} alt="cart" />
+          </button>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 };

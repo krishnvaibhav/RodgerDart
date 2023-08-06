@@ -9,8 +9,16 @@ const MainCardScreen = (props) => {
         <h1 className="font-semibold text-black text-lg">{props.title}</h1>
       </div>
       <div className="flex space-x-2">
-        <MainCards image={Icons.MegaChicken} foodName="MegaChicken" />
-        <MainCards image={Icons.ChickenRepublic} foodName="Chicken Republic" />
+        <MainCards
+          fav={props.fav}
+          image={Icons.MegaChicken}
+          foodName="MegaChicken"
+        />
+        <MainCards
+          fav={props.fav}
+          image={Icons.ChickenRepublic}
+          foodName="Chicken Republic"
+        />
       </div>
     </div>
   );
