@@ -23,7 +23,7 @@ const AddAddress = () => {
         location: latLng,
       });
       setSelectedAddress(address);
-      setInputAddress(address); // Also update the input address state to keep the input in sync with the selected address
+      setInputAddress(address);
     } catch (error) {
       console.error("Error selecting place:", error);
     }
@@ -105,7 +105,8 @@ const AddAddress = () => {
           </p>
           <div>
             <PlacesAutocomplete
-              value={inputAddress} // Use the input address state for the input field value
+              key={"AIzaSyDesOie1K0-Ho2y_Aj35-FNI8L2Jk8P-qg"}
+              value={inputAddress}
               onChange={handlePlaceChange}
               onSelect={handlePlaceSelect}
             >

@@ -21,7 +21,7 @@ const PaymentForm = (props) => {
   const [cvc, setCvc] = useState("");
   const [expiry, setExpiry] = useState("");
   const [focus, setFocus] = useState("");
-  const [name, setName] = useState("pranoy peter lund");
+  const [name, setName] = useState("pranoy peter");
   const [number, setNumber] = useState("");
   const [open, setOpen] = React.useState(false);
 
@@ -104,7 +104,16 @@ const PaymentForm = (props) => {
               fullWidth
               margin="dense"
             />
-            <button className="p-3 mt-5 text-white" style={{backgroundColor:"#B10000",width:"100%",borderRadius:5}}>SAVE</button>
+            <button
+              className="p-3 mt-5 text-white"
+              style={{
+                backgroundColor: "#B10000",
+                width: "100%",
+                borderRadius: 5,
+              }}
+            >
+              SAVE
+            </button>
           </Box>
         </Modal>
       </div>

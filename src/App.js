@@ -32,6 +32,7 @@ import Restaurants from "./components/Restaurants";
 import RestuarantCardScreen from "./components/RestaurantsCardScreen";
 import CartScreen from "./components/CartScreen";
 import OrderHistory from "./components/HomeScreenComponent/OrderHistory";
+import OrderDetails from "./components/HomeScreenComponent/OrderDetails";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
@@ -70,6 +71,7 @@ function App() {
             <>
               <Route exact path="/homescreen" element={<HomeScreen />} />
               <Route exact path="/orderhistory" element={<OrderHistory />} />
+              <Route exact path="/orderdetails" element={<OrderDetails />} />
               <Route exact path="/browscreen" element={<BrowseScreen />} />
               <Route exact path="/restaurantscreen" element={<Restaurants />} />
               <Route

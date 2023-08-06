@@ -21,7 +21,6 @@ const WelcomeBack = () => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
       localStorage.setItem("userIDToken", user.user.getIdToken);
-      // console.log(user.user.getIdToken);
       console.log(auth.currentUser.getIdToken);
       dispatch({
         type: "SET_USER",

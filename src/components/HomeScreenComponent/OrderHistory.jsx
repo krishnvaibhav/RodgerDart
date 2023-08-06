@@ -2,6 +2,7 @@ import React from "react";
 import NavTopBar from "./NavTopBar";
 import ongoinimg from "../../assets/ongoinghistoryimg.png";
 import BottomContainer from "../HomeScreenComponent/BottomContainer";
+import { useNavigate } from "react-router-dom";
 
 const OrderHistory = () => {
   const orderList = [
@@ -112,6 +113,8 @@ const OrderHistory = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
   return (
     <div style={{ height: "99vh" }}>
       <div style={{ height: "12%" }}>
@@ -159,12 +162,27 @@ const OrderHistory = () => {
             <div key={index} style={{ width: "100%" }} className="p-3">
               <div className="mt-2 flex items-center justify-between">
                 <div>
-                  <p style={{ fontSize: 14, fontWeight: 400 }}>{el.item}</p>
-                  <p style={{ color: "#A4AAAD", fontSize: 10 }}>{el.details}</p>
+                  <p style={{ fontSize: 16, fontWeight: 600 }}>{el.item}</p>
+                  <p
+                    style={{ color: "#868686", fontSize: 16, fontWeight: 600 }}
+                  >
+                    {el.details}
+                  </p>
                 </div>
-                <div>
-                  <p style={{ color: "#455A64" }}>{el.price}</p>
-                  <p style={{ color: "#455A64" }}>{el.price}</p>
+                <div className="flex flex-col items-end justify-end">
+                  <p
+                    style={{ color: "#868686", fontSize: 12, fontWeight: 500 }}
+                  >
+                    {el.price}
+                  </p>
+                  <p
+                    onClick={() => {
+                      navigate("/orderdetails");
+                    }}
+                    style={{ color: "#B10000", fontSize: 12, fontWeight: 500 }}
+                  >
+                    View Order Details
+                  </p>
                 </div>
               </div>
               <hr />
