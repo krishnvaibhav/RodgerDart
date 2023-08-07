@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Icon from "../HomeScreenComponent/ImagePath";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import Sheet from "react-modal-sheet";
 import { easeIn } from "framer-motion";
 import { collection } from "firebase/firestore";
 import { db } from "../../firebase";
+import { AppContext } from "../../context/appContext";
 
 const MainCards = (props) => {
   const [favItem, setFavItem] = useState(false);
@@ -17,6 +18,7 @@ const MainCards = (props) => {
   const [isFfocus, setFFocus] = useState(false);
   const [popUpval, setPopUpVal] = useState(380);
   const navigate = useNavigate();
+  const { item, setItem } = useContext(AppContext);
 
   const itemRef = collection(db, "users");
 
@@ -189,6 +191,7 @@ const MainCards = (props) => {
                     borderRadius: 5,
                   }}
                 >
+                  {/* CART LOGIC */}
                   <button
                     onClick={() => {
                       setPopUpVal(800);

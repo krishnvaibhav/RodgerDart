@@ -34,11 +34,6 @@ const reducer = (state, action) => {
         ...state,
         name: action.name,
       };
-    case "SET_RESTAURANT":
-      return {
-        ...state,
-        Rid: action.Rid,
-      };
 
     default:
       return state;

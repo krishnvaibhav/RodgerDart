@@ -17,7 +17,7 @@ import OtpScreen from "./components/OtpScreen";
 import WelcomeBack from "./components/WelcomeBack";
 import { auth } from "./firebase";
 import BillNavbar from "./components/BillNavbar";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import BillScreen from "./components/BillScreen";
 import TipScreen from "./components/tipScreen";
 import PaymentSuccess from "./components/PaymentSuccess";
@@ -33,12 +33,17 @@ import RestuarantCardScreen from "./components/StoreCard";
 import CartScreen from "./components/CartScreen";
 import OrderHistory from "./components/HomeScreenComponent/OrderHistory";
 import OrderDetails from "./components/HomeScreenComponent/OrderDetails";
+import { AppContext } from "./context/appContext";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
   const [loggedin, SetLogin] = useState(false);
 
-  // console.log(localStorage.getItem("userIDToken"));
+  const context = useContext(AppContext);
+
+  useEffect(() => {
+    console.log(context);
+  }, []);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {

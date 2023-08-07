@@ -1,21 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Icon from "./ImagePath";
 import { useNavigate } from "react-router-dom";
 import { useStateValue } from "../../context/stateProvider";
+import { AppContext } from "../../context/appContext";
 
 const MainCards = (props) => {
   const [favItem, setFavItem] = useState(false);
   const [rating, setRating] = useState();
   const navigate = useNavigate();
   const [{}, dispatch] = useStateValue();
+  const { setItem, item } = useContext(AppContext);
 
-  const HandleCardClick = () => {
-    dispatch({
-      type: "SET_RESTAURANT",
-      Rid: props.foodName,
-    });
-    navigate("/restCard");
+  const HandleCardClick = async () => {
+    try {
+      console.log(item);
+      navigate("/restCard");
+    } catch (err) {
+      console.log("error in handle card click");
+    }
   };
 
   const performNotification = () => {
