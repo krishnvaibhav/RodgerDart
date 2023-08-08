@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import BillNavbar from "./BillNavbar";
 import PaymentSuccessimg from "../assets/paymentsucess.png";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/appContext";
 
 const PaymentSuccess = () => {
+  const { price } = useContext(AppContext);
+
+  useEffect(() => {
+    console.log(price);
+  }, [price]);
   const navigate = useNavigate();
   return (
     <div

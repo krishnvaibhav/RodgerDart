@@ -9,8 +9,10 @@ import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import { Icon } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 const MyCards = () => {
+  const navigate = useNavigate();
   const cardList = [
     {
       name: "vaibhav",
@@ -77,7 +79,10 @@ const MyCards = () => {
           className="flex items-center justify-center"
         >
           <button
-            className="flex items-center justify-center p-3 text-white rounded"
+            className="flex items-center justify-center p-3 m-4 text-white rounded"
+            onClick={() => {
+              navigate("/addcard");
+            }}
             style={{
               borderColor: "#B10000",
               borderWidth: 2,

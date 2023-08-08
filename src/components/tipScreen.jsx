@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BillNavbar from "./BillNavbar";
 import tipImg from "../assets/tipimg.png";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/appContext";
 
 const TipScreen = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const TipScreen = () => {
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState("");
 
-  const tipOptions = ["N250", "N300", "N350", "N400"];
+  const tipOptions = [250, 300, 350, 400];
 
   const handleTipSelection = (tip) => {
     if (customTip !== "") {
@@ -19,15 +20,27 @@ const TipScreen = () => {
   };
 
   const handleCustomTipChange = (event) => {
-    setSelectedTip(null);
+    setSelectedTip("");
     setCustomTip(event.target.value);
   };
 
-  const handleTipSubmit = () => {
-    console.log("Selected Tip:", selectedTip);
-    console.log("Custom Tip:", customTip);
-  };
+  const { price, setPrice } = useContext(AppContext);
+  const [updatedPrice, setUpdatedPrice] = useState(price);
 
+  useEffect(() => {
+    console.log(price);
+    setPrice(updatedPrice);
+  }, [price, setPrice, updatedPrice]);
+
+  const handleTipSubmit = () => {
+    const newPrice = {
+      ...price,
+      tip: selectedTip || customTip,
+    };
+    setUpdatedPrice(newPrice);
+    setPrice(newPrice);
+    navigate("/paymentsuccess");
+  };
   return (
     <div>
       <BillNavbar title="Add a Tip" location="checkout" />
@@ -60,7 +73,7 @@ const TipScreen = () => {
                   onClick={() => handleTipSelection(tip)}
                   style={selectedTip === tip ? selectedStyle : buttonStyle}
                 >
-                  {tip}
+                  N{tip}
                 </button>
               ))}
               <input
@@ -77,7 +90,6 @@ const TipScreen = () => {
           <button
             onClick={() => {
               handleTipSubmit();
-              navigate("/paymentsuccess");
             }}
             className="p-3 text-white w-60 rounded"
             style={{ backgroundColor: "#B10000" }}

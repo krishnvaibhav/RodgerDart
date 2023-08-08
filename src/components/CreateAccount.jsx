@@ -1,10 +1,12 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { useStateValue } from "../context/stateProvider";
+import { AppContext } from "../context/appContext";
 const CreateAccount = () => {
+  const { setEmailContext } = useContext(AppContext);
   const [{}, dispatch] = useStateValue();
   const navigator = useNavigate();
   const [email, setEmail] = useState("");
@@ -20,7 +22,6 @@ const CreateAccount = () => {
         email,
         password
       );
-      console.log(name, number);
       dispatch({
         type: "SET_NUMBER",
         number: number,
@@ -29,6 +30,7 @@ const CreateAccount = () => {
         type: "SET_NAME",
         name: name,
       });
+      setEmailContext(email);
       navigator(`/getotp`);
       console.log(userCred.user);
     } catch (err) {

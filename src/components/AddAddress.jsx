@@ -6,12 +6,44 @@ import PlacesAutocomplete, {
   getLatLng,
 } from "react-places-autocomplete";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 const AddAddress = () => {
-  const [inputAddress, setInputAddress] = useState(""); // Separate state for the input field
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const data = await updateDoc(docRef, {
+      addresses: arrayUnion({
+        name: Firstname + " " + LastName,
+        location: selectedAddress,
+        email: email,
+        phone: phone,
+        state: state,
+        local: local,
+      }),
+    });
+
+    navigate("/homescreen");
+  };
+  const [inputAddress, setInputAddress] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
+  const [Firstname, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [state, setState] = useState("");
+  const [local, setLocal] = useState("");
 
   const handlePlaceChange = (address) => {
-    setInputAddress(address); // Update the input address state
+    setInputAddress(address);
   };
 
   const handlePlaceSelect = async (address) => {
@@ -42,6 +74,10 @@ const AddAddress = () => {
             id="outlined-basic"
             placeholder="Enter First Name"
             variant="outlined"
+            value={Firstname}
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
           />
         </div>
         <div className="m-3">
@@ -53,6 +89,10 @@ const AddAddress = () => {
             id="outlined-basic"
             placeholder="Enter Last Name"
             variant="outlined"
+            value={LastName}
+            onChange={(e) => {
+              setLastName(e.target.value);
+            }}
           />
         </div>
         <div className="m-3">
@@ -64,6 +104,10 @@ const AddAddress = () => {
             id="outlined-basic"
             placeholder="Enter Email"
             variant="outlined"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
           />
         </div>
         <div className="m-3">
@@ -75,6 +119,10 @@ const AddAddress = () => {
             id="outlined-basic"
             placeholder="Enter Phone Number"
             variant="outlined"
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }}
           />
         </div>
         <div className="m-3">
@@ -86,6 +134,10 @@ const AddAddress = () => {
             id="outlined-basic"
             placeholder="Enter State"
             variant="outlined"
+            value={state}
+            onChange={(e) => {
+              setState(e.target.value);
+            }}
           />
         </div>
         <div className="m-3">
@@ -97,6 +149,10 @@ const AddAddress = () => {
             id="outlined-basic"
             placeholder="Enter Local Area"
             variant="outlined"
+            value={local}
+            onChange={(e) => {
+              setLocal(e.target.value);
+            }}
           />
         </div>
         <div className="m-3">
@@ -147,6 +203,10 @@ const AddAddress = () => {
       </div>
       <div className="flex items-center justify-center">
         <button
+          onClick={() => {
+            console.log(selectedAddress);
+            handleClick();
+          }}
           className="p-3 m-3 text-white rounded"
           style={{ backgroundColor: "#B10000", width: "83%" }}
         >

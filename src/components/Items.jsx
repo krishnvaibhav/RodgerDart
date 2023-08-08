@@ -1,39 +1,59 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import discountimg from "../assets/discountcode.png";
+import { AppContext } from "../context/appContext";
 
 const Items = () => {
   const items = [
     {
       item: "Mordern Light Cloths",
       details: "small, black, cotton",
-      price: "N27,000.00",
+      price: 27000.0,
     },
     {
       item: "Mordern Light Cloths",
       details: "small, black, cotton",
-      price: "N27,000.00",
+      price: 27000.0,
     },
     {
       item: "Mordern Light Cloths",
       details: "small, black, cotton",
-      price: "N27,000.00",
+      price: 27000.0,
     },
     {
       item: "Mordern Light Cloths",
       details: "small, black, cotton",
-      price: "N27,000.00",
+      price: 27000.0,
     },
     {
       item: "Mordern Light Cloths",
       details: "small, black, cotton",
-      price: "N27,000.00",
+      price: 27000.0,
     },
     {
       item: "Mordern Light Cloths",
       details: "small, black, cotton",
-      price: "N27,000.00",
+      price: 27000.0,
     },
   ];
+
+  const totalAmount = items.reduce((total, item) => total + item.price, 0);
+  const deliverFee = 1500;
+  const serviceFee = 1500;
+  const VAT = 1500;
+  const discount = 100;
+  const finalTotal = totalAmount + deliverFee + serviceFee + VAT - discount;
+
+  const { price, setPrice } = useContext(AppContext);
+  useEffect(() => {
+    setPrice({
+      totalAmount,
+      deliverFee,
+      serviceFee,
+      VAT,
+      discount,
+      finalTotal,
+    });
+  }, []);
 
   return (
     <div>
@@ -49,7 +69,9 @@ const Items = () => {
                 <p style={{ color: "#A4AAAD", fontSize: 10 }}>{el.details}</p>
               </div>
               <div>
-                <p style={{ color: "#455A64" }}>{el.price}</p>
+                <p style={{ color: "#455A64" }}>
+                  {"N" + el.price.toLocaleString()}
+                </p>
               </div>
             </div>
             <hr />
@@ -71,40 +93,40 @@ const Items = () => {
           <hr />
           <div className="flex items-center justify-between p-2">
             <div>
-              <p style={{ fontSize: 12 }}>Sub Toatal (3 items)</p>
+              <p style={{ fontSize: 12 }}>Sub Toatal ({items.length} items)</p>
             </div>
-            <p style={{ fontSize: 12 }}>N20,600</p>
+            <p style={{ fontSize: 12 }}>{"N" + totalAmount.toLocaleString()}</p>
           </div>
           <div className="flex items-center justify-between p-2">
             <div>
               <p style={{ fontSize: 12 }}>VAT</p>
             </div>
-            <p style={{ fontSize: 12 }}>N1,500</p>
+            <p style={{ fontSize: 12 }}>{"N" + VAT.toLocaleString()}</p>
           </div>
 
           <div className="flex items-center justify-between p-2">
             <div>
               <p style={{ fontSize: 12 }}>Delivery Fee</p>
             </div>
-            <p style={{ fontSize: 12 }}>N1,500</p>
+            <p style={{ fontSize: 12 }}>{"N" + deliverFee.toLocaleString()}</p>
           </div>
           <div className="flex items-center justify-between p-2">
             <div>
               <p style={{ fontSize: 12 }}>Service Fee</p>
             </div>
-            <p style={{ fontSize: 12 }}>N1,500</p>
+            <p style={{ fontSize: 12 }}>{"N" + serviceFee.toLocaleString()}</p>
           </div>
           <div className="flex items-center justify-between p-2">
             <div>
               <p style={{ fontSize: 12 }}>Discount</p>
             </div>
-            <p style={{ fontSize: 12 }}>-N1,000</p>
+            <p style={{ fontSize: 12 }}>-{"N" + discount.toLocaleString()}</p>
           </div>
           <div className="flex items-center justify-between p-2 mt-2">
             <div>
               <p style={{ fontSize: 16 }}>Toatal</p>
             </div>
-            <p style={{ fontSize: 16 }}>N26,000</p>
+            <p style={{ fontSize: 16 }}>{"N" + finalTotal.toLocaleString()}</p>
           </div>
         </div>
       </div>

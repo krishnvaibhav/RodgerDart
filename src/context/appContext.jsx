@@ -1,14 +1,17 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 const AppContext = createContext();
 
 const AppProvider = (props) => {
-  const [number, setNumber] = useState("8075961210");
+  const [price, setPrice] = useState({});
 
-  const [item, setItem] = useState({});
+  useEffect(() => {
+    console.log("price updated");
+    console.log(price);
+  }, [price]);
 
   return (
-    <AppContext.Provider value={{ number, setNumber, item, setItem }}>
+    <AppContext.Provider value={{ price, setPrice }}>
       {props.children}
     </AppContext.Provider>
   );

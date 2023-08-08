@@ -44,22 +44,23 @@ function App() {
   useEffect(() => {
     console.log(context);
   }, []);
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      SetLogin(true);
-      dispatch({
-        type: "SET_USER",
-        user: user,
-      });
-    } else {
-      SetLogin(false);
-      dispatch({
-        type: "SET_USER",
-        user: null,
-      });
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        SetLogin(true);
+        dispatch({
+          type: "SET_USER",
+          user: user,
+        });
+      } else {
+        SetLogin(false);
+        dispatch({
+          type: "SET_USER",
+          user: null,
+        });
+      }
+    });
+  }, []);
 
   return (
     <Router>

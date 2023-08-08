@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import otpImg from "../assets/otp.png";
 import { useStateValue } from "../context/stateProvider";
 import { PhoneAuthProvider, linkWithCredential } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/appContext";
 const OtpScreen = () => {
   const [{ id, number, name }, dispatch] = useStateValue();
+  const { email } = useContext(AppContext);
   console.log(id, number, name);
   const navigator = useNavigate();
   const [otp, setOtp] = useState();
@@ -17,6 +19,7 @@ const OtpScreen = () => {
       setDoc(doc(db, "users", user.user.uid), {
         name: name,
         number: "+91" + number,
+        email: email,
       });
       dispatch({
         type: "SET_USER",

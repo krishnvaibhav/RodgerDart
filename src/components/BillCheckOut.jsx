@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -20,6 +20,9 @@ import paystackimg from "../assets/paystack.png";
 import Items from "./Items";
 import CustomCards from "./CustomCards";
 import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { AppContext } from "../context/appContext";
 
 const BillCheckOut = () => {
   const [address, setAddress] = useState("");
@@ -35,13 +38,30 @@ const BillCheckOut = () => {
     setShowBankDetails(event.target.value === "bank");
   };
 
-  const addressList = [
-    "123 Main Street, Anytown, USA",
-    "456 Oak Avenue, Cityville, Canada",
-    "789 Maple Lane, Villagetown, United Kingdom",
-    "321 Elm Street, Townsville, Australia",
-    "987 Pine Road, Hamletville, New Zealan",
-  ];
+  const [addressList, setAddressList] = useState([]);
+
+  const loadData = async () => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data().addresses;
+      const updatedAddressList = data.map((item) => item.location);
+      setAddressList(updatedAddressList);
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
+  const { price, setPrice } = useContext(AppContext);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    console.log(price);
+  }, [price]);
 
   const navigate = useNavigate();
   return (
