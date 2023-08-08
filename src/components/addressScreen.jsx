@@ -53,9 +53,8 @@ const AddressScreen = () => {
       }`}
       style={{}}
     >
-      <BillNavbar title="Address" location="homescreen" />
-      {addressList &&
-        addressList.length > 0 &&
+      <BillNavbar title="Address" isBack={true} />
+      {addressList.length > 0 &&
         addressList.map((el) => {
           return (
             <React.Fragment key={el.location}>

@@ -51,7 +51,7 @@ const MyProfile = () => {
 
   return (
     <div>
-      <BillNavbar title="My Profile" location="homescreen" />
+      <BillNavbar title="My Profile" isBack={true} />
       <div
         className="m-3 p-3 flex flex-col justify-between"
         style={{ height: "80vh" }}
@@ -93,7 +93,6 @@ const MyProfile = () => {
         </div>
         <div className="m-3 p-3">
           <button
-            onClick={handleSave}
             className="text-white rounded p-3"
             style={{ backgroundColor: "#B10000", width: "100%" }}
           >

@@ -5,7 +5,7 @@ import { TextField } from "@mui/material";
 const AddCard = () => {
   return (
     <div>
-      <BillNavbar title="Add New Cards" />
+      <BillNavbar title="Add New Cards" isBack={true} />
       <div
         className="flex flex-col items-center justify-between"
         style={{ height: "80vh" }}
@@ -60,7 +60,7 @@ const AddCard = () => {
             />
           </div>
         </div>
-        <div className="m-4 p-4" style={{width:"90%"}}>
+        <div className="m-4 p-4" style={{ width: "90%" }}>
           <button
             className="p-3 mt-5 text-white"
             style={{
