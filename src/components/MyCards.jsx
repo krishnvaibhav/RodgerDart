@@ -38,7 +38,7 @@ const MyCards = () => {
         cardList.length === 0 ? "justify-between" : ""
       }`}
     >
-      <BillNavbar title="Cards" />
+      <BillNavbar title="Cards" isBack={true} />
       <div
         className="flex flex-col items-center justify-between"
         style={{ height: "80vh" }}

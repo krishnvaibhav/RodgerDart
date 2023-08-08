@@ -28,7 +28,7 @@ const AddressScreeen = () => {
       }`}
       style={{ height: "80vh" }}
     >
-      <BillNavbar title="Address" />
+      <BillNavbar title="Address" isBack={true} />
       {addressList.length > 0 &&
         addressList.map((el) => {
           return (

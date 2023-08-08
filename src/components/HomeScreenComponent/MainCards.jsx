@@ -4,6 +4,10 @@ import Icon from "./ImagePath";
 import { useNavigate } from "react-router-dom";
 import { useStateValue } from "../../context/stateProvider";
 import { AppContext } from "../../context/appContext";
+import { db, storage } from "../../firebase";
+
+import { ref, getDownloadURL } from "firebase/storage";
+import { collection, doc, getDocs } from "firebase/firestore";
 
 const MainCards = (props) => {
   const [favItem, setFavItem] = useState(false);
@@ -11,7 +15,34 @@ const MainCards = (props) => {
   const navigate = useNavigate();
   const [{}, dispatch] = useStateValue();
   const { setItem, item } = useContext(AppContext);
+  const [colItems, setColItems] = useState([]);
 
+  const vendorCol = collection(db, "vendor");
+
+  /// const [iamgeUrl, setImageUrl] = useState("");
+  // ref(storage, "items")
+  //   .child("FoodName")
+  //   .getDownloadURL()
+  //   .then((url) => {
+  //     setImageUrl(url);
+  //   });
+
+  // console.log(iamgeUrl);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "vendor"));
+        console.log(querySnapshot.size);
+        querySnapshot.forEach((doc) => {
+          console.log(doc.id, " => ", doc.data());
+          console.log("repeat");
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
   const HandleCardClick = async () => {
     try {
       console.log(item);

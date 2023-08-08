@@ -5,8 +5,11 @@ import { TextField } from "@mui/material";
 const MyProfile = () => {
   return (
     <div>
-      <BillNavbar title="My Profile" />
-      <div className="m-3 p-3 flex flex-col justify-between" style={{height:"80vh"}}>
+      <BillNavbar title="My Profile" isBack={true} />
+      <div
+        className="m-3 p-3 flex flex-col justify-between"
+        style={{ height: "80vh" }}
+      >
         <div>
           <div className="m-2 p-2">
             <TextField fullWidth variant="outlined" label="Name" />
@@ -20,9 +23,8 @@ const MyProfile = () => {
         </div>
         <div className="m-3 p-3">
           <button
-          
             className="text-white rounded p-3"
-            style={{ backgroundColor: "#B10000",width:"100%" }}
+            style={{ backgroundColor: "#B10000", width: "100%" }}
           >
             SAVE
           </button>

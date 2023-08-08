@@ -65,13 +65,13 @@ const TopBar = (props) => {
             className="m-3  flex items-center justify-between"
           >
             <img className="m-3" src={profileimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               My Profile
             </p>
           </div>
           <div className="m-3  flex items-center justify-between">
             <img className="m-3" src={helpimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               Help
             </p>
           </div>
@@ -82,7 +82,7 @@ const TopBar = (props) => {
             className="m-3  flex items-center justify-between"
           >
             <img className="m-3" src={addressimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               Address
             </p>
           </div>
@@ -93,37 +93,37 @@ const TopBar = (props) => {
             className="m-3  flex items-center justify-between"
           >
             <img className="m-3" src={cardimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               Card Details
             </p>
           </div>
           <div className="m-3  flex items-center justify-between">
             <img className="m-3" src={favimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               Favorites
             </p>
           </div>
           <div className="m-3  flex items-center justify-between">
             <img className="m-3" src={inviteimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               Invite Friends
             </p>
           </div>
           <div className="m-3  flex items-center justify-between">
             <img className="m-3" src={privacyimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               Privacy
             </p>
           </div>
           <div className="m-3  flex items-center justify-between">
             <img className="m-3" src={aboutimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               About
             </p>
           </div>
           <div className="m-3  flex items-center justify-between">
             <img className="m-3" src={promotionsimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               Promotions
             </p>
           </div>
@@ -138,21 +138,30 @@ const TopBar = (props) => {
             className="m-3  flex items-center justify-between"
           >
             <img className="m-3" src={logoutimg} alt="" />
-            <p style={{ color: "#FFFFFF", fontSize: 24, fontWeight: 400 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 18, fontWeight: 400 }}>
               Log Out
             </p>
           </div>
         </div>
       </Drawer>
       <div className="rounded-full w-8 h-8 flex items-center justify-center">
-        <button
-          onClick={() => {
-            setOpenSide(true);
-            console.log("log");
-          }}
-        >
-          <img src={props.icon} alt="menu" />
-        </button>
+        {props.isBack ? (
+          <button
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <img src={props.icon} alt="menu" />
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setOpenSide(true);
+            }}
+          >
+            <img src={props.icon} alt="menu" />
+          </button>
+        )}
       </div>
       <h1 className="font-semibold" style={{ textAlign: "center", flex: 1 }}>
         {title}

@@ -7,32 +7,7 @@ const MainCardScreen = (props) => {
     {
       fav: props.fav,
       image: Icons.MegaChicken,
-      foodName: "MegaChicken",
-    },
-    {
-      fav: props.fav,
-      image: Icons.ChickenRepublic,
-      foodName: "ChickenRepublic",
-    },
-    {
-      fav: props.fav,
-      image: Icons.ChickenRepublic,
-      foodName: "Chicken Chuka",
-    },
-    {
-      fav: props.fav,
-      image: Icons.ChickenRepublic,
-      foodName: "Chicken Blah",
-    },
-    {
-      fav: props.fav,
-      image: Icons.ChickenRepublic,
-      foodName: "Chicken Chuka",
-    },
-    {
-      fav: props.fav,
-      image: Icons.ChickenRepublic,
-      foodName: "Chicken Blah",
+      foodName: props.foodName,
     },
   ];
 

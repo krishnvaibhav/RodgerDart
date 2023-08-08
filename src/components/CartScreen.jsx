@@ -81,6 +81,7 @@ const CartScreen = (props) => {
         icon={Icon.BackArrow}
         navigationPath="/"
         cart={Icon.cartIc}
+        isBack={true}
       />
 
       {cart.length === 0 ? (

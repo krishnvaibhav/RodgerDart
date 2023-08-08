@@ -1,12 +1,5 @@
 import { onAuthStateChanged } from "firebase/auth";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-  useNavigation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useStateValue } from "./context/stateProvider";
 import HomeScreen from "./components/HomeScreen";
 import CreateAccount from "./components/CreateAccount";
@@ -16,8 +9,7 @@ import NewPassword from "./components/NewPassword";
 import OtpScreen from "./components/OtpScreen";
 import WelcomeBack from "./components/WelcomeBack";
 import { auth } from "./firebase";
-import BillNavbar from "./components/BillNavbar";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BillScreen from "./components/BillScreen";
 import TipScreen from "./components/tipScreen";
 import PaymentSuccess from "./components/PaymentSuccess";
@@ -45,21 +37,23 @@ function App() {
     console.log(context);
   }, []);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      SetLogin(true);
-      dispatch({
-        type: "SET_USER",
-        user: user,
-      });
-    } else {
-      SetLogin(false);
-      dispatch({
-        type: "SET_USER",
-        user: null,
-      });
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        SetLogin(true);
+        dispatch({
+          type: "SET_USER",
+          user: user,
+        });
+      } else {
+        SetLogin(false);
+        dispatch({
+          type: "SET_USER",
+          user: null,
+        });
+      }
+    });
+  }, []);
 
   return (
     <Router>

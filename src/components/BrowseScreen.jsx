@@ -1,22 +1,33 @@
 import React, { useEffect, useRef, useState } from "react";
 import TopBar from "./HomeScreenComponent/TopBar";
 import SearchBar from "./HomeScreenComponent/SearchBar";
-import WelcomeCard from "./HomeScreenComponent/WelcomeCard";
-import OfferScreen from "./HomeScreenComponent/OfferScreen";
 import CategoryScreen from "./HomeScreenComponent/CategoryScreen";
 import MainCardScreen from "./HomeScreenComponent/MainCardScreen";
 import BottomContainer from "./HomeScreenComponent/BottomContainer";
 import Icon from "./HomeScreenComponent/ImagePath";
 import { CSSTransition } from "react-transition-group";
+
+import { auth, db, rootRef, storage } from "../firebase";
+import { getDocs, collection } from "firebase/firestore";
 import "./NotificationCard.css";
 const BrowseScreen = ({ navigate }) => {
   const [userName, setUserName] = useState("Nelson");
+
+  const [browserItem, setBrowserItem] = useState([]);
+
+  const itemRef = collection(db, "item");
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
       setDeviceWidth(window.innerWidth);
     };
+
+    getDocs(itemRef).then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        setBrowserItem([doc.data()]);
+      });
+    });
 
     window.addEventListener("resize", handleResize);
     return () => {
@@ -42,7 +53,6 @@ const BrowseScreen = ({ navigate }) => {
         classNames="notification"
         unmountOnExit
       >
-        {/* The div with the sliding animation */}
         <div
           className="topNotification"
           style={{
@@ -102,11 +112,15 @@ const BrowseScreen = ({ navigate }) => {
           >
             <SearchBar width={width} />
             <CategoryScreen width={width} />
-            <MainCardScreen title="Eatery" fav={setFavTime} />
-            <MainCardScreen title="Gffts" fav={setFavTime} />
-            <MainCardScreen title="Grocery" fav={setFavTime} />
-            <MainCardScreen title="Pastries" fav={setFavTime} />
-            <MainCardScreen title="Pharmacy" fav={setFavTime} />
+            {browserItem.map((item, key) => (
+              <MainCardScreen
+                type={item.type}
+                key={key}
+                fav={setFavTime}
+                foodName={item.name}
+                price={item.price}
+              />
+            ))}
           </div>
         </div>
       </div>
