@@ -4,10 +4,9 @@ import Icon from "./ImagePath";
 import { useNavigate } from "react-router-dom";
 import { useStateValue } from "../../context/stateProvider";
 import { AppContext } from "../../context/appContext";
-import { db, storage } from "../../firebase";
-
-import { ref, getDownloadURL } from "firebase/storage";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import { ref } from "firebase/storage";
+import { db } from "../../firebase";
 
 const MainCards = (props) => {
   const [favItem, setFavItem] = useState(false);
@@ -15,34 +14,56 @@ const MainCards = (props) => {
   const navigate = useNavigate();
   const [{}, dispatch] = useStateValue();
   const { setItem, item } = useContext(AppContext);
-  const [colItems, setColItems] = useState([]);
+  const [cardVendor, setCardVendor] = useState([]);
+  const [cardItem, setCardItem] = useState([]);
 
-  const vendorCol = collection(db, "vendor");
+  const cardRef = collection(db, "vendor");
+  const itemRef = collection(db, "item");
 
-  /// const [iamgeUrl, setImageUrl] = useState("");
-  // ref(storage, "items")
-  //   .child("FoodName")
-  //   .getDownloadURL()
-  //   .then((url) => {
-  //     setImageUrl(url);
-  //   });
+  const fetchVendorData = async () => {
+    try {
+      getDocs(cardRef).then((snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          category: doc.data().category,
+        }));
+        setCardVendor({ vendor: data });
+      });
 
-  // console.log(iamgeUrl);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "vendor"));
-        console.log(querySnapshot.size);
-        querySnapshot.forEach((doc) => {
-          console.log(doc.id, " => ", doc.data());
-          console.log("repeat");
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+      // console.log(data);
+    } catch (error) {
+      // Handle any potential errors here
+      console.error("Error fetching data:", error);
+    }
+    console.log(cardVendor.vendor);
+  };
+
+  fetchVendorData();
+
+  const fetchItemData = async () => {
+    try {
+      getDocs(itemRef).then((snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          description: doc.data().description,
+          price: doc.data().price,
+          quant: doc.data().quant,
+          type: doc.data().type,
+          vid: doc.data().vid,
+        }));
+        setCardItem({ items: data });
+      });
+    } catch (error) {
+      // Handle any potential errors here
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  fetchItemData();
+
+  console.log(cardItem.items);
   const HandleCardClick = async () => {
     try {
       console.log(item);
