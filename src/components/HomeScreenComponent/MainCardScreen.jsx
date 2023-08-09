@@ -15,11 +15,11 @@ const MainCardScreen = (props) => {
     try {
       getDocs(cardRef).then((snapshot) => {
         const data = snapshot.docs.map((doc) => ({
-          id: doc.id,
+          vid: doc.id,
           name: doc.data().name,
           category: doc.data().category,
         }));
-        setCardVendor({ vendor: data });
+        setCardVendor({ data });
       });
 
       // console.log(data);
@@ -27,7 +27,6 @@ const MainCardScreen = (props) => {
       // Handle any potential errors here
       console.error("Error fetching data:", error);
     }
-    console.log(cardVendor.vendor);
   };
 
   fetchVendorData();
@@ -42,9 +41,10 @@ const MainCardScreen = (props) => {
           price: doc.data().price,
           quant: doc.data().quant,
           type: doc.data().type,
+          rating: doc.data().rating,
           vid: doc.data().vid,
         }));
-        setCardItem({ items: data });
+        setCardItem({ data });
       });
     } catch (error) {
       // Handle any potential errors here
@@ -54,7 +54,6 @@ const MainCardScreen = (props) => {
 
   fetchItemData();
 
-  console.log(cardItem.items);
   const items = [
     {
       fav: props.fav,
@@ -81,9 +80,15 @@ const MainCardScreen = (props) => {
         }}
         className="flex"
       >
-        {items.map((el) => (
+        {/* {items.map((el) => (
           <MainCards fav={el.fav} image={el.image} foodName={el.foodName} />
-        ))}
+        ))} */}
+
+        {cardItem.map((item, index) => {
+          cardVendor.vid === cardItem[index].vid && (
+            <MainCards key={index} foodName={item.name} rating={item.rating} />
+          );
+        })}
       </div>
     </div>
   );

@@ -63,6 +63,7 @@ const MainCards = (props) => {
         <h2 className=" font-normal text-base ">{props.foodName}</h2>
         <div>
           <img src={Icon.RatingIcon} alt="" />
+          <p>{props.rating}</p>
         </div>
       </div>
     </div>
