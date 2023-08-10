@@ -34,10 +34,6 @@ function App() {
   const context = useContext(AppContext);
 
   useEffect(() => {
-    console.log(context);
-  }, []);
-
-  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         SetLogin(true);

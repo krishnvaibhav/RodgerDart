@@ -1,8 +1,11 @@
 import { Box, Input, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cards from "react-credit-cards-2";
 import Modal from "@mui/material/Modal";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import CryptoJS from "crypto-js";
 
 const style = {
   position: "absolute",
@@ -18,10 +21,12 @@ const style = {
 };
 
 const PaymentForm = (props) => {
-  const [cvc, setCvc] = useState("");
+  const { list } = props;
+
+  const [cvv, setCvv] = useState("");
   const [expiry, setExpiry] = useState("");
   const [focus, setFocus] = useState("");
-  const [name, setName] = useState("pranoy peter");
+  const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [open, setOpen] = React.useState(false);
 
@@ -32,35 +37,58 @@ const PaymentForm = (props) => {
     setFocus(e.target.name);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case "cvc":
-        setCvc(value);
-        break;
-      case "expiry":
-        setExpiry(value);
-        break;
-      case "name":
-        setName(value);
-        break;
-      case "number":
-        setNumber(value);
-        break;
-      default:
-        break;
-    }
+  const [selectedCard, setSelectedCard] = useState("");
+
+  const handleCardChange = (cardName) => {
+    setSelectedCard(cardName);
   };
+
+  const [cardsList, setCardsList] = useState(list);
+
+  const handleClick = async () => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const encryptedNuber = CryptoJS.AES.encrypt(
+      number,
+      "secret_key"
+    ).toString();
+    const encryptedCVV = CryptoJS.AES.encrypt(cvv, "secret_key").toString();
+    const newCard = {
+      name: name,
+      CardNumber: encryptedNuber,
+      CVV: encryptedCVV,
+      expiry: expiry,
+    };
+
+    setCardsList([...cardsList, newCard]);
+    const data = await updateDoc(docRef, {
+      cards: arrayUnion(newCard),
+    });
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    console.log(selectedCard);
+  }, [selectedCard]);
 
   return (
     <div id="PaymentForm">
-      <Cards
-        cvc={cvc}
-        expiry={expiry}
-        focused={focus}
-        name={name}
-        number={number}
-      />
+      {list.map((el, index) => (
+        <label key={index}>
+          <input
+            type="radio"
+            value={el.CardNumber}
+            checked={selectedCard === el.CardNumber}
+            onChange={() => handleCardChange(el.CardNumber)}
+          />
+          <Cards
+            cvc={"***"}
+            expiry={el.expiry}
+            focused={focus}
+            name={el.name}
+            number={"**** **** **** ****"}
+          />
+        </label>
+      ))}
       <div>
         <Modal
           open={open}
@@ -79,6 +107,10 @@ const PaymentForm = (props) => {
               variant="standard"
               fullWidth
               margin="dense"
+              value={number}
+              onChange={(e) => {
+                setNumber(e.target.value);
+              }}
             />
             <TextField
               className=""
@@ -87,6 +119,10 @@ const PaymentForm = (props) => {
               variant="standard"
               fullWidth
               margin="dense"
+              value={cvv}
+              onChange={(e) => {
+                setCvv(e.target.value);
+              }}
             />
             <TextField
               className=""
@@ -95,6 +131,10 @@ const PaymentForm = (props) => {
               variant="standard"
               fullWidth
               margin="dense"
+              value={expiry}
+              onChange={(e) => {
+                setExpiry(e.target.value);
+              }}
             />
             <TextField
               className=""
@@ -103,8 +143,13 @@ const PaymentForm = (props) => {
               variant="standard"
               fullWidth
               margin="dense"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
             />
             <button
+              onClick={handleClick}
               className="p-3 mt-5 text-white"
               style={{
                 backgroundColor: "#B10000",
@@ -118,7 +163,9 @@ const PaymentForm = (props) => {
         </Modal>
       </div>
       <button
-        onClick={handleOpen}
+        onClick={() => {
+          handleOpen();
+        }}
         className="p-2 mt-4"
         style={{
           borderColor: "red",

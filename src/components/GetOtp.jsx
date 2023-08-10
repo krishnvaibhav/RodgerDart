@@ -46,7 +46,6 @@ const GetOtp = () => {
     }
     navigate("/otpscreen");
   };
-
   return (
     <div
       style={{ height: "100vh" }}

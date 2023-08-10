@@ -10,7 +10,6 @@ const ForgotPassword = () => {
   const handleDispatch = () => {
     try {
       if (!number) {
-        // Handle the case when the number is empty
         console.log("Please enter a phone number");
         return;
       }
@@ -19,10 +18,10 @@ const ForgotPassword = () => {
 
       // The hang issue
 
-      // dispatch({
-      //   type: "SET_NUMBER",
-      //   number: number,
-      // });
+      dispatch({
+        type: "SET_FNUMBER",
+        number: number,
+      });
 
       navigator("/getotp");
     } catch (err) {

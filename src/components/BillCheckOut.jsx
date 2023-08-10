@@ -28,6 +28,17 @@ const BillCheckOut = () => {
   const [address, setAddress] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [showBankDetails, setShowBankDetails] = useState(false);
+  const [cardList, setCardList] = useState([]);
+  const loadCards = async () => {
+    const userDoc = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(userDoc);
+    if (docSnap.exists()) {
+      setCardList(docSnap.data().cards);
+    } else {
+      setCardList([]); // Set to empty array if document doesn't exist
+      console.log("No such document!");
+    }
+  };
 
   const handleChange = (event) => {
     setAddress(event.target.value);
@@ -57,11 +68,19 @@ const BillCheckOut = () => {
 
   useEffect(() => {
     loadData();
+    loadCards();
   }, []);
 
-  useEffect(() => {
-    console.log(price);
-  }, [price]);
+  const [selectedCardOption, setSelectedCardOption] = useState("");
+
+  const context = useContext(AppContext);
+
+  const selectedAddress = context.address;
+  console.log(selectedAddress);
+
+  const handleRadioChange = (option) => {
+    setSelectedOption(option);
+  };
 
   const navigate = useNavigate();
   return (
@@ -206,7 +225,7 @@ const BillCheckOut = () => {
         </label>
         {showBankDetails && (
           <div style={{ margin: 20 }}>
-            <CustomCards />
+            <CustomCards list={cardList} />
           </div>
         )}
         <label

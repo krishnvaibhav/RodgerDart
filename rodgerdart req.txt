@@ -1,2 +1,8 @@
-router history in back button
-localstorage
+1st lab
+
+env file
+convert cards in checkout to radio button from db
+add name and address in home screen 
+
+
+sk_test_65acab90921789545e5a980f825373dad7dff717  - paystack

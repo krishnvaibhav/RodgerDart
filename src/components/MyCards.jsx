@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BillNavbar from "./BillNavbar";
 import addressimg from "../assets/address.png";
 import "../styles/style.css";
@@ -10,29 +10,31 @@ import "react-credit-cards-2/dist/es/styles-compiled.css";
 import { Icon } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import CryptoJS from "crypto-js";
 
 const MyCards = () => {
   const navigate = useNavigate();
-  const cardList = [
-    {
-      name: "vaibhav",
-      cvv: "456",
-      cardnumber: "1234567890126567",
-      expiry: "12/24",
-    },
-    {
-      name: "vaibhav",
-      cvv: "456",
-      cardnumber: "1234567890126567",
-      expiry: "12/24",
-    },
-    {
-      name: "vaibhav",
-      cvv: "456",
-      cardnumber: "1234567890126567",
-      expiry: "12/24",
-    },
-  ];
+
+  const [cardList, setCardList] = useState([]);
+  const loadCards = async () => {
+    const userDoc = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(userDoc);
+    if (docSnap.exists()) {
+      setCardList(docSnap.data().cards);
+    } else {
+      setCardList([]);
+      console.log("No such document!");
+    }
+  };
+
+  useEffect(() => {
+    loadCards();
+    // const decryptedBytes = CryptoJS.AES.decrypt("el", "secret_key");
+    // const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
+    // console.log(decryptedText);
+  }, []);
 
   return (
     <div
@@ -51,10 +53,11 @@ const MyCards = () => {
               return (
                 <div className="flex m-3 p-3 items-center justify-center">
                   <Cards
-                    cvc={el.cvv}
+                    cvc={el.CVV}
                     expiry={el.expiry}
                     name={el.name}
-                    number={el.cardnumber}
+                    number="**** **** **** ****"
+                    issuer="SBI"
                     preview={true}
                   />
                   <img

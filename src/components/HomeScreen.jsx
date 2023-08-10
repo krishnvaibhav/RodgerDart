@@ -10,9 +10,34 @@ import Icon from "./HomeScreenComponent/ImagePath";
 import { CSSTransition } from "react-transition-group";
 import "./NotificationCard.css";
 import Drawer from "@mui/material/Drawer";
+import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 const HomeScreen = () => {
-  const [userName, setUserName] = useState("Nelson");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [Phone, setPhone] = useState("");
+  const navigate = useNavigate();
+
+  const loadData = async () => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      const data = docSnap.data();
+      setUserName(data.name);
+      setEmail(data.email);
+      setPhone(data.number);
+    } else {
+      console.log("No such document!");
+    }
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
 
   useEffect(() => {

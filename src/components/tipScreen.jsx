@@ -3,12 +3,62 @@ import BillNavbar from "./BillNavbar";
 import tipImg from "../assets/tipimg.png";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/appContext";
+import { usePaystackPayment } from "react-paystack";
+import { useStateValue } from "../context/stateProvider";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 const TipScreen = () => {
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const loadData = async () => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      const data = docSnap.data();
+      setEmail(data.email);
+    } else {
+      console.log("No such document!");
+    }
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const { price } = useContext(AppContext);
 
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState("");
+
+  const amount = price.finalTotal;
+  const finalSTip = isNaN(parseInt(customTip)) ? 0 : parseFloat(customTip);
+  const finalCTip = selectedTip;
+
+  const final =
+    amount * 100 + (finalCTip === "" ? finalSTip * 100 : finalCTip * 100);
+
+  console.log(final);
+
+  const config = {
+    email: email,
+    amount: final,
+    publicKey: "pk_test_f44835512bf5938d1b140f16fccad5647fe56d19",
+  };
+
+  const onSuccess = (reference) => {
+    if (reference.status === "success") {
+      navigate("/paymentsuccess");
+    }
+  };
+
+  const onClose = () => {
+    console.log("closed");
+  };
+
+  const initializePayment = usePaystackPayment(config);
+
+  const navigate = useNavigate();
 
   const tipOptions = [250, 300, 350, 400];
 
@@ -16,7 +66,7 @@ const TipScreen = () => {
     if (customTip !== "") {
       setCustomTip("");
     }
-    setSelectedTip(tip);
+    setSelectedTip(parseFloat(tip));
   };
 
   const handleCustomTipChange = (event) => {
@@ -24,22 +74,14 @@ const TipScreen = () => {
     setCustomTip(event.target.value);
   };
 
-  const { price, setPrice } = useContext(AppContext);
-  const [updatedPrice, setUpdatedPrice] = useState(price);
+  const [paymentUrl, setPaymentUrl] = useState("");
 
-  useEffect(() => {
-    console.log(price);
-    setPrice(updatedPrice);
-  }, [price, setPrice, updatedPrice]);
+  const paynow = async () => {
+    initializePayment(onSuccess, onClose);
+  };
 
   const handleTipSubmit = () => {
-    const newPrice = {
-      ...price,
-      tip: selectedTip || customTip,
-    };
-    setUpdatedPrice(newPrice);
-    setPrice(newPrice);
-    navigate("/paymentsuccess");
+    paynow();
   };
   return (
     <div>

@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import BillNavbar from "./BillNavbar";
 import { TextField } from "@mui/material";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import CryptoJS from "crypto-js";
 
 const AddCard = () => {
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const [CVV, setCVV] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const encryptedNumber = CryptoJS.AES.encrypt(
+      number,
+      "secret_key"
+    ).toString();
+    const encryptedCVV = CryptoJS.AES.encrypt(CVV, "secret_key").toString();
+    const data = await updateDoc(docRef, {
+      cards: arrayUnion({
+        name: name,
+        CardNumber: encryptedNumber,
+        CVV: encryptedCVV,
+        expiry: expiry,
+      }),
+    });
+    navigate(-1);
+  };
   return (
     <div>
       <BillNavbar title="Add New Cards" isBack={true} />
@@ -33,6 +60,10 @@ const AddCard = () => {
               variant="standard"
               fullWidth
               margin="dense"
+              value={number}
+              onChange={(e) => {
+                setNumber(e.target.value);
+              }}
             />
             <TextField
               className=""
@@ -41,6 +72,10 @@ const AddCard = () => {
               variant="standard"
               fullWidth
               margin="dense"
+              value={CVV}
+              onChange={(e) => {
+                setCVV(e.target.value);
+              }}
             />
             <TextField
               className=""
@@ -49,6 +84,10 @@ const AddCard = () => {
               variant="standard"
               fullWidth
               margin="dense"
+              value={expiry}
+              onChange={(e) => {
+                setExpiry(e.target.value);
+              }}
             />
             <TextField
               className=""
@@ -57,6 +96,10 @@ const AddCard = () => {
               variant="standard"
               fullWidth
               margin="dense"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
             />
           </div>
         </div>
@@ -68,6 +111,7 @@ const AddCard = () => {
               width: "100%",
               borderRadius: 5,
             }}
+            onClick={handleClick}
           >
             SAVE
           </button>

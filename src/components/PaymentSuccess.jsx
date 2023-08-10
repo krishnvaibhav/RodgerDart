@@ -9,6 +9,7 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     console.log(price);
+    console.log(price);
   }, [price]);
   const navigate = useNavigate();
   return (

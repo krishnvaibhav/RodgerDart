@@ -31,7 +31,7 @@ const AddAddress = () => {
       }),
     });
 
-    navigate("/homescreen");
+    navigate(-1);
   };
   const [inputAddress, setInputAddress] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -63,7 +63,7 @@ const AddAddress = () => {
 
   return (
     <div>
-      <BillNavbar title="Address" location="checkout" />
+      <BillNavbar title="Address" isBack={true} />
       <div className="m-3 p-3">
         <div className="m-3">
           <p style={{ fontSize: 16, fontWeight: 500, color: "#3C3E3E" }}>

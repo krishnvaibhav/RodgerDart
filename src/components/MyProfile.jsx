@@ -47,6 +47,7 @@ const MyProfile = () => {
 
       console.log("Document successfully updated!");
     }
+    navigate(-1);
   };
 
   return (
@@ -95,6 +96,7 @@ const MyProfile = () => {
           <button
             className="text-white rounded p-3"
             style={{ backgroundColor: "#B10000", width: "100%" }}
+            onClick={handleSave}
           >
             SAVE
           </button>
