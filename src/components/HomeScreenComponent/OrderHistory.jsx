@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import TopBar from "./TopBar";
 
 import Icon from "./ImagePath";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocFromCache,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 
 const OrderHistory = () => {
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
@@ -20,6 +30,55 @@ const OrderHistory = () => {
     };
   }, []);
   const width = useRef(deviceWidth / 2 + deviceWidth / 3);
+
+  const [doneList, setDoneList] = useState([]);
+  const [ongoingList, setOngoingList] = useState([]);
+  const [ongoingOrder, setOngoingOrder] = useState([]);
+
+  const loadDoneData = async () => {
+    const q = query(collection(db, "orders"), where("completed", "==", true));
+
+    const querySnapshot = await getDocs(q);
+    const doneData = [];
+    querySnapshot.forEach((doc) => {
+      doneData.push(doc.data().items);
+    });
+    console.log(doneData);
+
+    // Use Promise.all to wait for all asynchronous operations to complete
+    await Promise.all(
+      doneData[0].map(async (el) => {
+        console.log(el);
+        const docRef = doc(db, "item", el);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+        } else {
+          console.log("No such document!");
+        }
+      })
+    );
+  };
+
+  const loadOngoingData = async () => {
+    const q = query(collection(db, "orders"), where("completed", "==", false));
+
+    const querySnapshot = await getDocs(q);
+    const doneData = [];
+    querySnapshot.forEach((doc) => {
+      doneData.push(doc.data());
+    });
+    setOngoingList(doneData);
+  };
+
+  const loadDoneOrder = async () => {};
+
+  useEffect(() => {
+    loadDoneData();
+    loadOngoingData();
+    loadDoneOrder();
+  }, []);
 
   const orderList = [
     {

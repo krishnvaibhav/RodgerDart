@@ -21,12 +21,8 @@ const OtpScreenForget = () => {
     try {
       console.log(id, otp);
       const credential = PhoneAuthProvider.credential(id, otp);
-      console.log(auth.currentUser);
-      const userCredential = await reauthenticateWithCredential(
-        auth.currentUser,
-        credential
-      );
 
+      const userCredential = await signInWithCredential(auth, credential);
       if (userCredential.user) {
         dispatch({
           type: "SET_USER",

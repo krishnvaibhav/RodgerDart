@@ -1,9 +1,10 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { useStateValue } from "../context/stateProvider";
+import { doc, getDoc } from "firebase/firestore";
 
 const WelcomeBack = () => {
   const [{ user }, dispatch] = useStateValue();
@@ -28,9 +29,24 @@ const WelcomeBack = () => {
       });
       navigate("/homescreen");
     } catch (err) {
-      console.log(err);
+      alert("No user found . please signup");
     }
   };
+
+  const func = async () => {
+    const docRef = doc(db, "item", "Jcx8hJlYnWRq9trICfsZ");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
+  useEffect(() => {
+    func();
+  }, []);
   return (
     <div>
       <div className="flex items-center justify-center m-3 p-2">
@@ -48,7 +64,7 @@ const WelcomeBack = () => {
             onChange={(e) => {
               setEmail(e.target.value);
             }}
-            type="text"
+            type="email"
             placeholder="Enter your Email"
             className="p-3 mt-2 w-80"
             style={{
@@ -64,7 +80,7 @@ const WelcomeBack = () => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-            type="text"
+            type="password"
             placeholder="Enter your Password"
             className="p-3 mt-2 w-80"
             style={{

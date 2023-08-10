@@ -104,7 +104,7 @@ const CreateAccount = () => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-            type="text"
+            type="password"
             placeholder="Enter your Password"
             className="p-3 mt-2 w-80"
             style={{

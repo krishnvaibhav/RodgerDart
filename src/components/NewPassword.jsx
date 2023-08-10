@@ -56,7 +56,7 @@ const NewPassword = () => {
         <div className="m-2 p-2">
           <h3>New Password</h3>
           <input
-            type="text"
+            type="password"
             placeholder="Enter your new password"
             className="p-3 mt-2 w-80"
             style={{
@@ -72,7 +72,7 @@ const NewPassword = () => {
         <div className="m-2 p-2">
           <h3>Confirm Pasword</h3>
           <input
-            type="text"
+            type="password"
             placeholder="Confirm your password"
             className="p-3 mt-2 w-80"
             style={{
