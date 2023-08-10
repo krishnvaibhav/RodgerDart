@@ -35,7 +35,7 @@ const RestuarantCardScreen = ({ props }) => {
       }}
     >
       <TopBar
-        icon={Icon.MenuIc}
+        icon={Icon.BackArrow}
         cart={Icon.cartIc}
         width={deviceWidth}
         style={{
