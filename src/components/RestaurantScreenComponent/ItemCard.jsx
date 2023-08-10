@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Icon from "../HomeScreenComponent/ImagePath";
 import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import Sheet from "react-modal-sheet";
 import { easeIn } from "framer-motion";
-import { collection } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import { AppContext } from "../../context/appContext";
 
@@ -20,7 +20,56 @@ const MainCards = (props) => {
   const navigate = useNavigate();
   const { item, setItem } = useContext(AppContext);
 
-  const itemRef = collection(db, "users");
+  const [cardItem, setCardItem] = useState();
+  const [cardVendor, setCardVendor] = useState();
+
+  const itemRef = collection(db, "item");
+  const cardRef = collection(db, "vendor");
+
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      try {
+        const snapshot = await getDocs(cardRef);
+        const data = snapshot.docs.map((doc) => ({
+          vid: doc.id,
+          name: doc.data().name,
+          category: doc.data().category,
+          rating: doc.data().rating,
+        }));
+        setCardVendor(data);
+      } catch (error) {
+        console.error("Error fetching vendor data:", error);
+      }
+    };
+
+    fetchVendorData();
+  }, []);
+
+  useEffect(() => {
+    const fetchItemData = async () => {
+      try {
+        const snapshot = await getDocs(itemRef);
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          description: doc.data().description,
+          price: doc.data().price,
+          quant: doc.data().quant,
+          type: doc.data().type,
+          rating: doc.data().rating,
+          vid: doc.data().vid,
+          vendor_name:
+            cardVendor.find((vendor) => vendor.vid === doc.data().vid)?.name ||
+            "Anonymous",
+        }));
+        setCardItem(data);
+      } catch (error) {
+        console.error("Error fetching item data:", error);
+      }
+    };
+
+    fetchItemData();
+  }, []);
 
   return (
     <div>

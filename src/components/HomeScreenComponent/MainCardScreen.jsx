@@ -19,6 +19,7 @@ const MainCardScreen = (props) => {
           vid: doc.id,
           name: doc.data().name,
           category: doc.data().category,
+          rating: doc.data().rating,
         }));
         setCardVendor(data);
       } catch (error) {
@@ -44,7 +45,7 @@ const MainCardScreen = (props) => {
           vid: doc.data().vid,
           vendor_name:
             cardVendor.find((vendor) => vendor.vid === doc.data().vid)?.name ||
-            "Anonymus",
+            "Anonymous",
         }));
         setCardItem(data);
       } catch (error) {
@@ -55,23 +56,18 @@ const MainCardScreen = (props) => {
     fetchItemData();
   }, []);
 
-  const items = [
-    {
-      image: Icons.MegaChicken,
-      foodName: props.foodName,
-    },
-  ];
-
-  const filteredState = cardItem.filter((item) =>
-    cardVendor.some((vendor) => vendor.vid === item.vid)
+  // Filter vendors based on the category matching props.title
+  const filteredVendors = cardVendor.filter(
+    (vendor) => vendor.category.toLowerCase() === props.title.toLowerCase()
   );
-  const hasItemsWithType = cardItem.some(
-    (item) => item.type.toLowerCase() === props.title.toLowerCase()
+
+  const hasVendorIn = cardVendor.some(
+    (vendor) => vendor.category.toLowerCase() === props.title.toLowerCase()
   );
 
   return (
     <div>
-      {hasItemsWithType && (
+      {hasVendorIn && (
         <div>
           <h1 className="font-semibold text-black text-lg">{props.title}</h1>
         </div>
@@ -83,27 +79,17 @@ const MainCardScreen = (props) => {
         }}
         className="flex"
       >
-        {cardItem
-          .filter(
-            (item) => item.type.toLowerCase() === props.title.toLowerCase()
-          )
-          .map((filteredItem, index) => {
-            const vendor = cardVendor.find(
-              (vendor) => vendor.vid === filteredItem.vid
-            );
-            const vendorName = vendor ? vendor.name : "Unknown Vendor";
-
-            return (
-              <div key={index}>
-                <MainCards
-                  key={index}
-                  foodName={filteredItem.name}
-                  rating={filteredItem.rating}
-                  vendorName={vendorName}
-                />
-              </div>
-            );
-          })}
+        {filteredVendors.map((filteredVendor, index) => {
+          return (
+            <div key={index} style={{ width: "50%" }}>
+              <MainCards
+                key={index}
+                foodName={filteredVendor.name}
+                rating={filteredVendor.rating}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
