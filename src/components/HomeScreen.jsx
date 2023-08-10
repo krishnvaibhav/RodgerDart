@@ -131,7 +131,7 @@ const HomeScreen = () => {
             <OfferScreen />
             <CategoryScreen width={width} />
             <MainCardScreen title="Eatery" fav={setFavTime} />
-            <MainCardScreen title="Gffts" fav={setFavTime} />
+            <MainCardScreen title="Gifts" fav={setFavTime} />
             <MainCardScreen title="Grocery" fav={setFavTime} />
             <MainCardScreen title="Pastries" fav={setFavTime} />
             <MainCardScreen title="Pharmacy" fav={setFavTime} />
