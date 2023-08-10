@@ -11,11 +11,12 @@ const MainCards = (props) => {
   const navigate = useNavigate();
   const [{}, dispatch] = useStateValue();
   const { setItem, item } = useContext(AppContext);
+  const [cTitle, setCtitle] = useState(capitalizeString(props.foodName));
+  const [itemID, setItemID] = useState(props.ids);
 
   const HandleCardClick = async () => {
     try {
-      console.log(item);
-      navigate("/restCard");
+      navigate(`/restCard/${itemID}/${cTitle}`);
     } catch (err) {
       console.log("error in handle card click");
     }
@@ -23,7 +24,6 @@ const MainCards = (props) => {
 
   const performNotification = () => {
     props.fav(true);
-
     setTimeout(() => {
       props.fav(false);
     }, 2000);
@@ -33,7 +33,6 @@ const MainCards = (props) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  const [cTitle, setCtitle] = useState(capitalizeString(props.foodName));
   return (
     <div className="mr-4">
       <div className="relative">

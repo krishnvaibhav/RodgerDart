@@ -76,7 +76,7 @@ function App() {
               <Route exact path="/storescreen" element={<Store />} />
               <Route
                 exact
-                path={`/restCard`}
+                path={`/restCard/:itemID/:cTitle`}
                 element={<RestuarantCardScreen />}
               />
               <Route exact path="/cartscreen" element={<CartScreen />} />

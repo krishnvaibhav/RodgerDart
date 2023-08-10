@@ -84,6 +84,7 @@ const MainCardScreen = (props) => {
             <div key={index} style={{ width: "50%" }}>
               <MainCards
                 key={index}
+                ids={filteredVendor.vid}
                 foodName={filteredVendor.name}
                 rating={filteredVendor.rating}
               />
