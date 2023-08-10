@@ -21,6 +21,7 @@ import notifyIcon from "../../assets/notification.png";
 import selectOrder from "../../assets/selectOrderIcon.png";
 import emptyCart from "../../assets/emptyCart.svg";
 import FoodImage from "../../assets/FoodImage.png";
+import Banner from "../../assets/banner.png";
 
 export default {
   Eats: Eatery,
@@ -46,4 +47,5 @@ export default {
   selectOrder: selectOrder,
   EmptyCart: emptyCart,
   FoodImage: FoodImage,
+  BannerCard: Banner,
 };
