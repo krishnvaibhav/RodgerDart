@@ -20,7 +20,14 @@ import paystackimg from "../assets/paystack.png";
 import Items from "./Items";
 import CustomCards from "./CustomCards";
 import { useNavigate } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { AppContext } from "../context/appContext";
 
@@ -64,11 +71,25 @@ const BillCheckOut = () => {
       console.log("No such document!");
     }
   };
+
+  const navigate = useNavigate();
+
   const { price, setPrice } = useContext(AppContext);
 
+  const loadOrder = async () => {
+    const q = query(collection(db, "orders"), where("completed", "==", false));
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      if (querySnapshot.size > 0) {
+        navigate("/trackorder");
+      }
+    });
+  };
   useEffect(() => {
     loadData();
     loadCards();
+    loadOrder();
   }, []);
 
   const [selectedCardOption, setSelectedCardOption] = useState("");
@@ -82,7 +103,6 @@ const BillCheckOut = () => {
     setSelectedOption(option);
   };
 
-  const navigate = useNavigate();
   return (
     <div>
       <div className="flex items-center justify-center w-4/5 m-auto">

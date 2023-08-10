@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/appContext";
 import { usePaystackPayment } from "react-paystack";
 import { useStateValue } from "../context/stateProvider";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
 const TipScreen = () => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const loadData = async () => {
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
@@ -18,10 +19,32 @@ const TipScreen = () => {
       console.log("Document data:", docSnap.data());
       const data = docSnap.data();
       setEmail(data.email);
+      setName(data.name);
     } else {
       console.log("No such document!");
     }
   };
+
+  const addNewOrder = async (ref) => {
+    console.log("started");
+    const docRef = await addDoc(collection(db, "orders"), {
+      completed: false,
+      paymentSuccess: true,
+      name: name,
+      email: email,
+      price: price,
+      tip: final / 100 - price.finalTotal,
+      uid: auth.currentUser.uid,
+      items: {
+        1: "Jcx8hJlYnWRq9trICfsZ",
+        2: "Vfz3tGi0tgYsTfu7qq28",
+      },
+      reference: ref,
+    });
+    console.log("Document written with ID: ", docRef.id);
+    navigate("/paymentsuccess");
+  };
+
   useEffect(() => {
     loadData();
   }, []);
@@ -48,7 +71,7 @@ const TipScreen = () => {
 
   const onSuccess = (reference) => {
     if (reference.status === "success") {
-      navigate("/paymentsuccess");
+      addNewOrder(reference);
     }
   };
 

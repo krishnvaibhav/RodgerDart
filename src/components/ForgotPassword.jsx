@@ -19,11 +19,11 @@ const ForgotPassword = () => {
       // The hang issue
 
       dispatch({
-        type: "SET_FNUMBER",
+        type: "SET_NUMBER",
         number: number,
       });
 
-      navigator("/getotp");
+      navigator("/getotpForget");
     } catch (err) {
       console.log(err);
     }
@@ -33,7 +33,7 @@ const ForgotPassword = () => {
       <div className="flex items-center justify-center m-3 p-2">
         <AiOutlineArrowLeft
           onClick={() => {
-            navigator("/");
+            navigator(-1);
           }}
           style={{ width: 24, height: 24 }}
           className="absolute left-0 ml-8"

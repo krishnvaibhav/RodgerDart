@@ -1,7 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { auth } from "../firebase";
+import {
+  EmailAuthProvider,
+  PhoneAuthCredential,
+  reauthenticateWithCredential,
+  updatePassword,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const NewPassword = () => {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const user = auth.currentUser;
+  const navigate = useNavigate();
+
+  const reauthUser = async () => {
+    const credentials = PhoneAuthCredential.credential();
+
+    try {
+      await reauthenticateWithCredential(user, credentials);
+      console.log("User reauthenticated successfully!");
+    } catch (error) {
+      console.error("Reauthentication error:", error);
+      throw error;
+    }
+  };
+  const changePassword = async () => {
+    try {
+      if (password === confirmPassword) {
+        if (user) {
+          await updatePassword(user, password);
+          console.log("Password changed successfully!");
+          navigate("/");
+        } else {
+          console.log("No user is currently signed in.");
+        }
+      } else {
+        alert("Passwords do not match");
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+    }
+  };
   return (
     <div>
       <div className="flex items-center justify-center m-3 p-2">
@@ -22,6 +63,10 @@ const NewPassword = () => {
               border: "0.4px solid rgba(151, 146, 140, 0.51)",
               borderRadius: 3,
             }}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
         </div>
         <div className="m-2 p-2">
@@ -34,12 +79,19 @@ const NewPassword = () => {
               border: "0.4px solid rgba(151, 146, 140, 0.51)",
               borderRadius: 3,
             }}
+            value={confirmPassword}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+            }}
           />
         </div>
       </div>
 
       <div className="flex items-center justify-center mt-5 flex-col">
-        <button className="bg-color p-3 m-3 w-80 rounded text-white">
+        <button
+          className="bg-color p-3 m-3 w-80 rounded text-white"
+          onClick={changePassword}
+        >
           Confirm
         </button>
       </div>

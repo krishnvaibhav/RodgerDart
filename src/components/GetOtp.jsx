@@ -81,7 +81,6 @@ const GetOtp = () => {
         style={{ width: 400, height: 400, position: "absolute" }}
         id="recaptcha-container"
       ></div>
-
       <div className="mt-4">
         <button
           onClick={() => onSignUp()}

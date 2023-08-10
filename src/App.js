@@ -26,6 +26,8 @@ import CartScreen from "./components/CartScreen";
 import OrderHistory from "./components/HomeScreenComponent/OrderHistory";
 import OrderDetails from "./components/HomeScreenComponent/OrderDetails";
 import { AppContext } from "./context/appContext";
+import GetOtpForget from "./components/GetOtpForget";
+import OtpScreenForget from "./components/OtpScreenForget";
 
 function App() {
   const [{ user }, dispatch] = useStateValue();
@@ -61,6 +63,9 @@ function App() {
           <Route exact path="/newpassword" element={<NewPassword />} />
           <Route exact path="/otpscreen" element={<OtpScreen />} />
           <Route exact path="/getotp" element={<GetOtp />} />
+          <Route exact path="/getotpForget" element={<GetOtpForget />} />
+          <Route exact path="/otpscreenForget" element={<OtpScreenForget />} />
+          <Route exact path="/newpassword" element={<NewPassword />} />
 
           {loggedin && (
             <>
