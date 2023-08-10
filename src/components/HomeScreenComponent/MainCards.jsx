@@ -28,6 +28,12 @@ const MainCards = (props) => {
       props.fav(false);
     }, 2000);
   };
+
+  function capitalizeString(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  const [cTitle, setCtitle] = useState(capitalizeString(props.foodName));
   return (
     <div className="mr-4">
       <div className="relative">
@@ -56,14 +62,18 @@ const MainCards = (props) => {
           )}
         </div>
         <button onClick={HandleCardClick}>
-          <img src={props.image} style={{ width: 150, height: 100 }} alt="" />
+          <img
+            src={Icon.MegaChicken}
+            style={{ width: 150, height: 100 }}
+            alt=""
+          />
         </button>
       </div>
       <div className="flex flex-col">
-        <h2 className=" font-normal text-base ">{props.foodName}</h2>
-        <div>
+        <h2 className=" font-semibold text-base ">{cTitle}</h2>
+        <div className="flex flex-row space-x-2">
           <img src={Icon.RatingIcon} alt="" />
-          <p>{props.rating}</p>
+          <p className="text-sm font-thin">{props.rating}</p>
         </div>
       </div>
     </div>

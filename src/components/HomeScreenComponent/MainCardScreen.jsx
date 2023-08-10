@@ -11,29 +11,28 @@ const MainCardScreen = (props) => {
   const cardRef = collection(db, "vendor");
   const itemRef = collection(db, "item");
 
-  const fetchVendorData = async () => {
-    try {
-      getDocs(cardRef).then((snapshot) => {
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      try {
+        const snapshot = await getDocs(cardRef);
         const data = snapshot.docs.map((doc) => ({
           vid: doc.id,
           name: doc.data().name,
           category: doc.data().category,
         }));
-        setCardVendor({ data });
-      });
+        setCardVendor(data);
+      } catch (error) {
+        console.error("Error fetching vendor data:", error);
+      }
+    };
 
-      // console.log(data);
-    } catch (error) {
-      // Handle any potential errors here
-      console.error("Error fetching data:", error);
-    }
-  };
+    fetchVendorData();
+  }, []);
 
-  fetchVendorData();
-
-  const fetchItemData = async () => {
-    try {
-      getDocs(itemRef).then((snapshot) => {
+  useEffect(() => {
+    const fetchItemData = async () => {
+      try {
+        const snapshot = await getDocs(itemRef);
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           name: doc.data().name,
@@ -43,36 +42,40 @@ const MainCardScreen = (props) => {
           type: doc.data().type,
           rating: doc.data().rating,
           vid: doc.data().vid,
+          vendor_name:
+            cardVendor.find((vendor) => vendor.vid === doc.data().vid)?.name ||
+            "Anonymus",
         }));
-        setCardItem({ data });
-      });
-    } catch (error) {
-      // Handle any potential errors here
-      console.error("Error fetching data:", error);
-    }
-  };
+        setCardItem(data);
+      } catch (error) {
+        console.error("Error fetching item data:", error);
+      }
+    };
 
-  fetchItemData();
+    fetchItemData();
+  }, []);
 
   const items = [
     {
-      fav: props.fav,
       image: Icons.MegaChicken,
       foodName: props.foodName,
     },
   ];
 
-  useEffect(() => {
-    items.forEach((el) => {
-      console.log(el.fav);
-    });
-  }, []);
+  const filteredState = cardItem.filter((item) =>
+    cardVendor.some((vendor) => vendor.vid === item.vid)
+  );
+  const hasItemsWithType = cardItem.some(
+    (item) => item.type.toLowerCase() === props.title.toLowerCase()
+  );
 
   return (
     <div>
-      <div>
-        <h1 className="font-semibold text-black text-lg">{props.title}</h1>
-      </div>
+      {hasItemsWithType && (
+        <div>
+          <h1 className="font-semibold text-black text-lg">{props.title}</h1>
+        </div>
+      )}
       <div
         style={{
           overflowY: "scroll",
@@ -80,15 +83,27 @@ const MainCardScreen = (props) => {
         }}
         className="flex"
       >
-        {/* {items.map((el) => (
-          <MainCards fav={el.fav} image={el.image} foodName={el.foodName} />
-        ))} */}
+        {cardItem
+          .filter(
+            (item) => item.type.toLowerCase() === props.title.toLowerCase()
+          )
+          .map((filteredItem, index) => {
+            const vendor = cardVendor.find(
+              (vendor) => vendor.vid === filteredItem.vid
+            );
+            const vendorName = vendor ? vendor.name : "Unknown Vendor";
 
-        {cardItem.map((item, index) => {
-          cardVendor.vid === cardItem[index].vid && (
-            <MainCards key={index} foodName={item.name} rating={item.rating} />
-          );
-        })}
+            return (
+              <div key={index}>
+                <MainCards
+                  key={index}
+                  foodName={filteredItem.name}
+                  rating={filteredItem.rating}
+                  vendorName={vendorName}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );
