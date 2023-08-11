@@ -36,30 +36,35 @@ const OrderHistory = () => {
   const [ongoingOrder, setOngoingOrder] = useState([]);
 
   const loadDoneData = async () => {
-    const q = query(collection(db, "orders"), where("completed", "==", true));
+    try {
+      const q = query(collection(db, "orders"), where("completed", "==", true));
+      const querySnapshot = await getDocs(q);
 
-    const querySnapshot = await getDocs(q);
-    const doneData = [];
-    querySnapshot.forEach((doc) => {
-      doneData.push(doc.data().items);
-    });
-    console.log(doneData);
+      const doneData = querySnapshot.docs.map((doc) => doc.data().items);
 
-    // Use Promise.all to wait for all asynchronous operations to complete
-    await Promise.all(
-      doneData[0].map(async (el) => {
-        console.log(el);
-        const docRef = doc(db, "item", el);
-        const docSnap = await getDoc(docRef);
+      const data = [];
 
-        if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
-        } else {
-          console.log("No such document!");
-        }
-      })
-    );
+      if (doneData.length > 0 && doneData[0].length > 0) {
+        doneData[0].map(async (el) => {
+          try {
+            data.push(el);
+
+            const docRef = doc(db, "item", el);
+            const docSnap = await getDoc(docRef);
+          } catch (error) {
+            console.error("Error fetching item:", error);
+          }
+        });
+        setDoneList(data);
+      } else {
+        console.log("No completed orders or items found.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+
+  // Call the function to load data
 
   const loadOngoingData = async () => {
     const q = query(collection(db, "orders"), where("completed", "==", false));
@@ -77,8 +82,29 @@ const OrderHistory = () => {
   useEffect(() => {
     loadDoneData();
     loadOngoingData();
-    loadDoneOrder();
   }, []);
+
+  useEffect(() => {
+    console.log(doneList);
+    const fetchItemData = async () => {
+      try {
+        const itemPromises = doneList.map(async (el) => {
+          console.log(`fetching ${el}`);
+          const docRef = doc(db, "item", el);
+          const docSnap = await getDoc(docRef);
+          return docSnap.data();
+        });
+        const itemData = await Promise.all(itemPromises);
+        console.log("Item data:", itemData);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    if (doneList.length > 0) {
+      fetchItemData();
+    }
+  }, [doneList]);
 
   const orderList = [
     {
