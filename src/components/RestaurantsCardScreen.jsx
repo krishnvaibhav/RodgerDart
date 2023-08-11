@@ -97,20 +97,14 @@ const RestuarantCardScreen = ({ navigate }) => {
           >
             <SearchBar width={width} />
             <CategoryScreen width={width} />
-            {items.map((item) => (
+            {items.map((item, index) => (
               <ItemCard
-                key={item.foodName}
+                key={index}
                 image={Icon.FoodImage}
                 foodName={item.foodName}
                 price={item.price}
               />
             ))}
-            <ItemCard
-              key={"foodName"}
-              image={"Icon.FoodImage"}
-              foodName={"item.foodName"}
-              price={"item.price"}
-            />
           </div>
         </div>
       </div>

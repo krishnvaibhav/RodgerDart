@@ -18,13 +18,13 @@ const MainCards = (props) => {
   const navigate = useNavigate();
   const { item, setItem } = useContext(AppContext);
 
+  function capitalizeString(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   return (
     <div>
-      <button
-        onClick={() => {
-          navigate("/restCard");
-        }}
-      >
+      <div>
         <div className="relative">
           <div
             className="rounded-full absolute bg-white p-1 right-0 mr-2 mt-2"
@@ -51,8 +51,10 @@ const MainCards = (props) => {
           <img src={props.image} width={150} />
         </div>
         <div className="flex flex-col">
-          <h2 className=" font-semibold text-base ">{props.foodName}</h2>
-          <h2 className=" font-normal text-base ">N{props.price}</h2>
+          <h2 className=" font-semibold text-base text-left">
+            {capitalizeString(props.foodName)}
+          </h2>
+          <h2 className=" font-normal text-base text-left">N{props.price}</h2>
           <div
             style={{
               width: "100%",
@@ -83,7 +85,7 @@ const MainCards = (props) => {
             </button>
           </div>
         </div>
-      </button>
+      </div>
       <Sheet
         isOpen={isOpen}
         onClose={() => setOpen(false)}

@@ -81,7 +81,7 @@ const MainCardScreen = (props) => {
       >
         {filteredVendors.map((filteredVendor, index) => {
           return (
-            <div key={index} style={{ width: "50%" }}>
+            <div key={index * index} style={{ width: "50%" }}>
               <MainCards
                 key={index}
                 ids={filteredVendor.vid}
