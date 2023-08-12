@@ -10,13 +10,20 @@ import { CSSTransition } from "react-transition-group";
 import { auth, db, rootRef, storage } from "../firebase";
 import { getDocs, collection } from "firebase/firestore";
 import "./NotificationCard.css";
+import { useParams } from "react-router-dom";
 const BrowseScreen = ({ navigate }) => {
   const [userName, setUserName] = useState("Nelson");
 
   const [browserItem, setBrowserItem] = useState([]);
+  const [cardItem, setCardItem] = useState();
+  const [cardVendor, setCardVendor] = useState();
 
   const itemRef = collection(db, "item");
+  const cardRef = collection(db, "vendor");
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
+
+  const { cTitle } = useParams();
+  const { itemID } = useParams();
 
   useEffect(() => {
     const handleResize = () => {
@@ -37,6 +44,72 @@ const BrowseScreen = ({ navigate }) => {
   const width = useRef(deviceWidth / 2 + deviceWidth / 3);
 
   const [favTime, setFavTime] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchVendorData = async () => {
+      try {
+        const snapshot = await getDocs(cardRef);
+        const data = snapshot.docs.map((doc) => ({
+          vid: doc.id,
+          name: doc.data().name,
+          category: doc.data().category,
+          rating: doc.data().rating,
+          del_time: doc.data().del_time,
+          del_price: doc.data().del_price,
+          cl_time: doc.data().cl_time,
+        }));
+        // setCardVendor(data);
+      } catch (error) {
+        console.error("Error fetching vendor data:", error);
+      }
+    };
+
+    fetchVendorData();
+  }, []);
+
+  const getFilteredItems = () => {
+    if (cardItem && itemID) {
+      return cardItem.filter((item) => item.vid === itemID);
+    }
+    return [];
+  };
+
+  useEffect(() => {
+    const fetchItemData = async () => {
+      try {
+        const snapshot = await getDocs(itemRef);
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          description: doc.data().description,
+          price: doc.data().price,
+          quant: doc.data().quant,
+          type: doc.data().type,
+          rating: doc.data().rating,
+          vid: doc.data().vid,
+          vendor_name:
+            cardVendor.find((vendor) => vendor.vid === doc.data().vid)?.name ||
+            "Anonymous",
+        }));
+        setCardItem(data);
+      } catch (error) {
+        // console.error("Error fetching item data:", error);
+      }
+    };
+
+    fetchItemData();
+  }, [getFilteredItems]);
 
   return (
     <div
@@ -88,9 +161,10 @@ const BrowseScreen = ({ navigate }) => {
         </div>
       </CSSTransition>
       <TopBar
-        icon={Icon.MenuIc}
+        icon={Icon.BackArrow}
         cart={Icon.cartIc}
         width={deviceWidth}
+        isBack={true}
         style={{
           position: "fixed", // Set position to fixed to make the top bar fixed
           top: 0, // Place the top bar at the top of the viewport
@@ -112,15 +186,11 @@ const BrowseScreen = ({ navigate }) => {
           >
             <SearchBar width={width} />
             <CategoryScreen width={width} />
-            {browserItem.map((item, key) => (
-              <MainCardScreen
-                type={item.type}
-                key={key}
-                fav={setFavTime}
-                foodName={item.name}
-                price={item.price}
-              />
-            ))}
+            <MainCardScreen title="Eatery" fav={setFavTime} />
+            <MainCardScreen title="Gifts" fav={setFavTime} />
+            <MainCardScreen title="Grocery" fav={setFavTime} />
+            <MainCardScreen title="Pastries" fav={setFavTime} />
+            <MainCardScreen title="Pharmacy" fav={setFavTime} />
           </div>
         </div>
       </div>

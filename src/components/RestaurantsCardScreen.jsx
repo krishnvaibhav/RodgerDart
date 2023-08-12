@@ -25,45 +25,6 @@ const RestuarantCardScreen = ({ navigate }) => {
   }, []);
   const width = useRef(deviceWidth / 2 + deviceWidth / 3);
 
-  const items = [
-    {
-      key: "1",
-      price: "N300",
-      image: "",
-      foodName: "MegaChicken",
-    },
-    {
-      key: "2",
-      price: "N300",
-      image: "",
-      foodName: "ChickenRepublic",
-    },
-    {
-      key: "3",
-      price: "N300",
-      image: "",
-      foodName: "Chicken Chuka",
-    },
-    {
-      key: "4",
-      price: "N300",
-      image: "",
-      foodName: "Chicken Blah7",
-    },
-    {
-      key: "5",
-      price: "N300",
-      image: "",
-      foodName: "Chicken Chuka5",
-    },
-    {
-      key: "6",
-      price: "N300",
-      image: "",
-      foodName: "Chicken Blah",
-    },
-  ];
-
   return (
     <div
       style={{
@@ -97,20 +58,14 @@ const RestuarantCardScreen = ({ navigate }) => {
           >
             <SearchBar width={width} />
             <CategoryScreen width={width} />
-            {items.map((item) => (
+            {items.map((item, index) => (
               <ItemCard
-                key={item.foodName}
+                key={index}
                 image={Icon.FoodImage}
                 foodName={item.foodName}
                 price={item.price}
               />
             ))}
-            <ItemCard
-              key={"foodName"}
-              image={"Icon.FoodImage"}
-              foodName={"item.foodName"}
-              price={"item.price"}
-            />
           </div>
         </div>
       </div>

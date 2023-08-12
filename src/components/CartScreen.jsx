@@ -3,14 +3,21 @@ import TopBar from "./HomeScreenComponent/TopBar";
 import Icon from "./HomeScreenComponent/ImagePath.js";
 import { RxCrossCircled } from "react-icons/rx";
 import { auth, db, rootRef, storage } from "../firebase";
-import { getDocs, collection } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  getDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
 import { Button } from "@mui/material";
 
 const CartScreen = (props) => {
   const [cartId, setCartId] = useState([]);
-  const itemRef = collection(db, "users");
-  const cartRef = collection(db, "item");
+  const cartRef = doc(db, "cart", auth.currentUser.uid);
+  const itemRef = collection(db, "item");
+  const [savedItems, setSavedItems] = useState([]);
 
   getDocs(itemRef).then((snapshot) => {
     let user = auth.currentUser.uid;
@@ -21,58 +28,101 @@ const CartScreen = (props) => {
     });
   });
 
-  const [cart, setCart] = useState({
-    items: [],
-  });
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      const snapshot = await getDocs(cartRef);
+      snapshot.docs.forEach((items) => {
+        console.log(items.data());
+      });
       try {
-        getDocs(cartRef).then((snapshot) => {
-          const data = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            title: doc.data().name,
-            price: doc.data().price,
-            numberOf: doc.data().quant,
-            description: doc.data().description,
-            image: doc.data().img,
-          }));
-          setCart({ items: data });
-        });
-
-        // console.log(data);
-      } catch (error) {
-        // Handle any potential errors here
-        console.error("Error fetching data:", error);
-      }
+      } catch {}
     };
 
     fetchData();
-    // const imageRef = ref(rootRef, cart.items.image);
 
-    // const imageUrl = getDownloadURL(rootRef.child(cart.items.image));
-
-    // setCart((prev) => ({
-    //   ...prev,
-    //   imageUrl: imageUrl,
-    // }));
-    // console.log(cart);
-  }, []);
+    console.log(cart);
+  }, [cartId]);
 
   const handleIncrement = (index) => {
-    const updatedCart = { ...cart };
-    updatedCart.items[index].numberOf += 1;
-    setCart(updatedCart);
+    const updatedCartItems = [...cart.items];
+    updatedCartItems[index].numberOf += 1;
+
+    // Update the quantity in Firestore
+    const itemDocRef = doc(
+      db,
+      "users",
+      auth.currentUser.uid,
+      "cart",
+      cartId[index]
+    );
+    updateDoc(itemDocRef, { quantity: updatedCartItems[index].numberOf });
+
+    setCart({ items: updatedCartItems });
   };
 
   const handleDecrement = (index) => {
-    const updatedCart = { ...cart };
-    if (updatedCart.items[index].numberOf > 1) {
-      updatedCart.items[index].numberOf -= 1;
-      setCart(updatedCart);
+    if (cart.items[index].numberOf > 1) {
+      const updatedCartItems = [...cart.items];
+      updatedCartItems[index].numberOf -= 1;
+
+      const itemDocRef = doc(
+        db,
+        "users",
+        auth.currentUser.uid,
+        "cart",
+        cartId[index]
+      );
+      updateDoc(itemDocRef, { quantity: updatedCartItems[index].numberOf });
+
+      setCart({ items: updatedCartItems });
     }
   };
-  // const itemImage = ref(rootRef, cart.items.image);
+
+  useEffect(() => {
+    const fetchSavedItems = async () => {
+      try {
+        const itemsCollection = collection(db, "item");
+
+        // Read all documents in the "items" collection using getDocs
+        const querySnapshot = await getDocs(itemsCollection);
+
+        const savedItemsData = [];
+
+        querySnapshot.forEach((itemDoc) => {
+          cart.forEach((userCart) => {
+            userCart.cartItem.forEach((cartItem) => {
+              console.log();
+              console.log(itemDoc.id);
+              if (itemDoc.id === cartItem.id) {
+                savedItemsData.push({
+                  itemId: 0,
+                  name: itemDoc.data().name,
+                  descricption: itemDoc.data().descricption,
+                  price: itemDoc.data().price,
+                  quant: itemDoc.data().quant,
+                  rating: itemDoc.data().rating,
+                  type: itemDoc.data().type,
+                  vid: itemDoc.data().vid,
+                  // Add other item details you want to save
+                });
+              }
+            });
+          });
+        });
+
+        setSavedItems(savedItemsData);
+        console.log(savedItemsData);
+      } catch (error) {
+        console.error("Error fetching saved items:", error);
+      }
+    };
+
+    fetchSavedItems();
+
+    console.log(savedItems);
+  }, [cart]);
 
   return (
     <div>
@@ -133,7 +183,7 @@ const CartScreen = (props) => {
         </div>
       ) : (
         <div>
-          {cart.items.map((item, key) => (
+          {savedItems.map((item, key) => (
             <div key={key} className="flex flex-col pt-20 pl-10 space-y-20">
               <div className="flex space-x-4">
                 <img className="w-24" src={Icon.FoodImage} />
@@ -143,7 +193,7 @@ const CartScreen = (props) => {
                     width: "50%",
                   }}
                 >
-                  <h1 className="font-semibold">{item.title}</h1>
+                  <h1 className="font-semibold">{item.name}</h1>
                   <p
                     style={{
                       fontSize: "12px",
@@ -169,7 +219,7 @@ const CartScreen = (props) => {
                     <div style={{ backgroundColor: "#FDF8F8" }}>
                       <button onClick={() => handleDecrement(key)}>-</button>
                     </div>
-                    <h2 className="text-black">{item.numberOf}</h2>
+                    <h2 className="text-black">{item.quant}</h2>
                     <div style={{ backgroundColor: "#FDF8F8" }}>
                       <button onClick={() => handleIncrement(key)}>+</button>
                     </div>

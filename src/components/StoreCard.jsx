@@ -48,6 +48,9 @@ const RestuarantCardScreen = ({ props }) => {
           name: doc.data().name,
           category: doc.data().category,
           rating: doc.data().rating,
+          del_time: doc.data().del_time,
+          del_price: doc.data().del_price,
+          cl_time: doc.data().cl_time,
         }));
         setCardVendor(data);
       } catch (error) {
@@ -57,6 +60,14 @@ const RestuarantCardScreen = ({ props }) => {
 
     fetchVendorData();
   }, []);
+
+  const getFilteredItems = () => {
+    if (cardItem && itemID) {
+      const cartFil = cardItem.filter((item) => item.type === "eatery");
+      return cartFil.filter((item) => item.vid === itemID);
+    }
+    return [];
+  };
 
   useEffect(() => {
     const fetchItemData = async () => {
@@ -77,12 +88,12 @@ const RestuarantCardScreen = ({ props }) => {
         }));
         setCardItem(data);
       } catch (error) {
-        console.error("Error fetching item data:", error);
+        // console.error("Error fetching item data:", error);
       }
     };
 
     fetchItemData();
-  }, []);
+  }, [getFilteredItems]);
 
   return (
     <div
@@ -112,41 +123,91 @@ const RestuarantCardScreen = ({ props }) => {
           paddingBottom: "20px", // Add padding to create space for the BottomContainer
         }}
       >
+        <div className="mb-5">
+          <div className="object-fill">
+            <img src={Icon.BannerCard} />
+          </div>
+          <div
+            className="flex flex-row h-10 items-center p-2 space-x-1"
+            style={{ backgroundColor: "#FEF6F6" }}
+          >
+            <HiStar size={20} color="#ECCB57" />
+            <p
+              className="font-medium"
+              style={{
+                fontSize: 10,
+              }}
+            >
+              {cardItem &&
+                cardItem.map((item) =>
+                  item.vid === itemID ? (
+                    <span key={item.id}>{item.rating}</span>
+                  ) : null
+                )}
+            </p>
+            <RxDividerVertical size={20} />
+            <BsClock size={15} />
+            <p
+              className=" font-medium"
+              style={{
+                fontSize: 10,
+              }}
+            >
+              {cardVendor &&
+                cardVendor.map((item) =>
+                  item.vid === itemID ? (
+                    <span key={item.id}>{item.del_time} MINS</span>
+                  ) : null
+                )}
+            </p>
+            <RxDividerVertical size={20} />
+            <p
+              className="font-medium"
+              style={{
+                fontSize: 10,
+              }}
+            >
+              {cardVendor &&
+                cardVendor.map((item) =>
+                  item.vid === itemID ? (
+                    <span key={item.id}>Delivery fee N{item.del_price}</span>
+                  ) : null
+                )}
+            </p>
+            <RxDividerVertical size={20} />
+            <p
+              className="font-medium"
+              style={{
+                fontSize: 10,
+              }}
+            >
+              {cardVendor &&
+                cardVendor.map((item) =>
+                  item.vid === itemID ? (
+                    <span key={item.id}>Open until {item.cl_time}</span>
+                  ) : null
+                )}
+            </p>
+          </div>
+        </div>
         <div className="p-4 pb-1">
           <div
             style={{
               overflowY: "scroll",
             }}
           >
-            <div className="mb-5">
-              <div className="object-fill">
-                <img src={Icon.BannerCard} />
-              </div>
-              <div
-                className="flex flex-row h-10 items-center p-2 space-x-2"
-                style={{ backgroundColor: "#FEF6F6" }}
-              >
-                <HiStar size={20} color="#ECCB57" />
-                <p className="font-medium text-sm">
-                  {cardItem &&
-                    cardItem.map((item) =>
-                      item.vid === itemID ? (
-                        <span key={item.id}>{item.rating}</span>
-                      ) : null
-                    )}
-                </p>
-                <RxDividerVertical size={20} />
-                <BsClock size={15} />
-                <p>
-                  <span>{}</span> Mins
-                </p>
-              </div>
-            </div>
-            <ItemCard
-              image={Icon.MegaChicken}
-              foodName="Efro-riro and Eba"
-              price={"3,500.00"}
-            />
+            {cardItem && itemID ? (
+              getFilteredItems().map((item, index) => (
+                <ItemCard
+                  key={index}
+                  image={Icon.MegaChicken} // Update with the actual item image
+                  foodName={item.name}
+                  price={item.price}
+                />
+              ))
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
         </div>
       </div>

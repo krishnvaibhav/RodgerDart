@@ -25,7 +25,6 @@ const HomeScreen = () => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
       const data = docSnap.data();
       setUserName(data.name);
       setEmail(data.email);

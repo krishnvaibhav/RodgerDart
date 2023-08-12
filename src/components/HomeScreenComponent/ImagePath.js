@@ -22,7 +22,12 @@ import selectOrder from "../../assets/selectOrderIcon.png";
 import emptyCart from "../../assets/emptyCart.svg";
 import FoodImage from "../../assets/FoodImage.png";
 import Banner from "../../assets/banner.png";
-
+import cat1 from "../../assets/cat-1.png";
+import cat2 from "../../assets/cat-2.png";
+import cat3 from "../../assets/cat-3.png";
+import cat4 from "../../assets/cat-4.png";
+import cat5 from "../../assets/cat-5.png";
+import cat6 from "../../assets/cat-6.png";
 export default {
   Eats: Eatery,
   Gift: Gifts,
@@ -48,4 +53,10 @@ export default {
   EmptyCart: emptyCart,
   FoodImage: FoodImage,
   BannerCard: Banner,
+  Cat1: cat1,
+  Cat2: cat2,
+  Cat3: cat3,
+  Cat4: cat4,
+  Cat5: cat5,
+  Cat6: cat6,
 };

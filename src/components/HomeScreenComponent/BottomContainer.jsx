@@ -8,7 +8,8 @@ const BottomContainer = (props) => {
 
   const isHomeScreen = location.pathname === "/homescreen";
   const isRestScreen =
-    location.pathname === "/storescreen" || location.pathname === "/restCard";
+    location.pathname === "/storescreen" ||
+    location.pathname === `/restCard/:itemID/:cTitle`;
   const isBrowScreen = location.pathname === "/browscreen";
   const isOrdeScreen = location.pathname === "/orderhistory";
   return (

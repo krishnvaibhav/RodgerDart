@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import MainCards from "./MainCards";
-import Icons from "./ImagePath";
+import MainCards from "./HomeScreenComponent/MainCards";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../firebase";
 
 const MainCardScreen = (props) => {
   const [cardVendor, setCardVendor] = useState([]);
@@ -64,24 +63,29 @@ const MainCardScreen = (props) => {
   const hasVendorIn = cardVendor.some(
     (vendor) => vendor.category.toLowerCase() === props.title.toLowerCase()
   );
+  const maxColumns = 2;
+
+  // Calculate the width of each card based on the maxColumns
+  const cardWidth = `${100 / maxColumns}%`;
 
   return (
     <div>
-      {hasVendorIn && (
-        <div>
-          <h1 className="font-semibold text-black text-lg">{props.title}</h1>
-        </div>
-      )}
       <div
         style={{
-          overflowY: "scroll",
-          whiteSpace: "nowrap",
+          display: "flex",
+          flexWrap: "wrap",
         }}
-        className="flex"
       >
         {filteredVendors.map((filteredVendor, index) => {
           return (
-            <div key={index * index} style={{ width: "50%" }}>
+            <div
+              key={index * index}
+              style={{
+                width: cardWidth,
+                padding: "1px",
+                boxSizing: "border-box",
+              }}
+            >
               <MainCards
                 key={index}
                 ids={filteredVendor.vid}
