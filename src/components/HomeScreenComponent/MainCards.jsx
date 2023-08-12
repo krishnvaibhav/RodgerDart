@@ -23,9 +23,9 @@ const MainCards = (props) => {
   };
 
   const performNotification = () => {
-    props.fav(true);
+    setFavItem(true);
     setTimeout(() => {
-      props.fav(false);
+      setFavItem(false);
     }, 2000);
   };
 

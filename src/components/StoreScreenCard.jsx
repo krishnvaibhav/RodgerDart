@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from "react";
 import MainCards from "./HomeScreenComponent/MainCards";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 const MainCardScreen = (props) => {
   const [cardVendor, setCardVendor] = useState([]);
   const [cardItem, setCardItem] = useState([]);
+  const [userData, setUserData] = useState({});
 
   const cardRef = collection(db, "vendor");
   const itemRef = collection(db, "item");
+  const userRef = collection(db, "users");
 
   useEffect(() => {
     const fetchVendorData = async () => {
@@ -55,6 +67,21 @@ const MainCardScreen = (props) => {
     fetchItemData();
   }, []);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const docref = doc(db, "users", auth.currentUser.uid);
+      const docsnap = await getDoc(docref);
+      const userAcc = docsnap.data();
+      setUserData(userAcc);
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
+
   // Filter vendors based on the category matching props.title
   const filteredVendors = cardVendor.filter(
     (vendor) => vendor.category.toLowerCase() === props.title.toLowerCase()
@@ -67,6 +94,12 @@ const MainCardScreen = (props) => {
 
   // Calculate the width of each card based on the maxColumns
   const cardWidth = `${100 / maxColumns}%`;
+
+  const isItemInFavorites = (itemId) => {
+    return userData.favItem && userData.favItem.includes(itemId);
+  };
+
+  console.log(cardItem);
 
   return (
     <div>
@@ -91,6 +124,7 @@ const MainCardScreen = (props) => {
                 ids={filteredVendor.vid}
                 foodName={filteredVendor.name}
                 rating={filteredVendor.rating}
+                fav={isItemInFavorites(cardItem.id)}
               />
             </div>
           );
