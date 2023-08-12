@@ -37,6 +37,7 @@ const Restuarants = () => {
         title="Restuarant"
         icon={Icon.MenuIc}
         cart={Icon.cartIc}
+        isBack={false}
         width={deviceWidth}
         style={{
           position: "fixed", // Set position to fixed to make the top bar fixed

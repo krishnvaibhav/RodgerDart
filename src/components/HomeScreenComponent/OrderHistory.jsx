@@ -125,6 +125,7 @@ const OrderHistory = () => {
       <TopBar
         icon={Icon.MenuIc}
         cart={Icon.cartIc}
+        isBack={false}
         width={deviceWidth}
         style={{
           position: "fixed",

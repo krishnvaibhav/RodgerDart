@@ -36,8 +36,6 @@ const CartScreen = (props) => {
       snapshot.docs.forEach((items) => {
         console.log(items.data());
       });
-      try {
-      } catch {}
     };
 
     fetchData();

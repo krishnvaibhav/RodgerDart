@@ -203,6 +203,7 @@ const RestuarantCardScreen = ({ props }) => {
                   image={Icon.MegaChicken} // Update with the actual item image
                   foodName={item.name}
                   price={item.price}
+                  fId={itemID}
                 />
               ))
             ) : (

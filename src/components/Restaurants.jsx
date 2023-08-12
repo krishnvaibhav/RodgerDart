@@ -34,6 +34,7 @@ const Restuarants = () => {
     >
       <TopBar
         title="Rest"
+        isBack={true}
         style={{
           position: "fixed", // Set position to fixed to make the top bar fixed
           top: 0, // Place the top bar at the top of the viewport

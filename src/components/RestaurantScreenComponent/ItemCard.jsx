@@ -6,6 +6,15 @@ import { MdClose } from "react-icons/md";
 import Sheet from "react-modal-sheet";
 import { easeIn } from "framer-motion";
 import { AppContext } from "../../context/appContext";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { auth, db } from "../../firebase";
 
 const MainCards = (props) => {
   const [favItem, setFavItem] = useState(false);
@@ -21,6 +30,29 @@ const MainCards = (props) => {
   function capitalizeString(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+  const cartRef = doc(db, "cart", auth.currentUser?.uid);
+
+  const isOnCart = async () => {
+    const data = (await getDoc(cartRef)).data();
+
+    if (data && data.item_id && data.item_id.includes(props.fId)) {
+      return null;
+    } else {
+      return props.fId;
+    }
+  };
+
+  const addToCart = async () => {
+    const itemIdToAdd = await isOnCart();
+
+    if (itemIdToAdd !== null) {
+      await updateDoc(
+        cartRef,
+        { item_id: arrayUnion(itemIdToAdd) },
+        { merge: true }
+      );
+    }
+  };
 
   return (
     <div>
@@ -192,7 +224,7 @@ const MainCards = (props) => {
                   {/* CART LOGIC */}
                   <button
                     onClick={() => {
-                      setPopUpVal(800);
+                      addToCart();
                     }}
                     className="space-x-2"
                     style={{

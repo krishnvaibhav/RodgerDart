@@ -36,6 +36,7 @@ const RestuarantCardScreen = ({ navigate }) => {
     >
       <TopBar
         title={"Chicken"}
+        isBack={true}
         icon={Icon.BackArrow}
         style={{
           position: "fixed", // Set position to fixed to make the top bar fixed
@@ -64,6 +65,7 @@ const RestuarantCardScreen = ({ navigate }) => {
                 image={Icon.FoodImage}
                 foodName={item.foodName}
                 price={item.price}
+                fId={item.id}
               />
             ))}
           </div>
