@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import NavTopBar from "./NavTopBar";
 import { Divider } from "@mui/material";
+import { AppContext } from "../../context/appContext";
 
 const OrderDetails = () => {
-  const items = [
+  const { items } = useContext(AppContext);
+
+  console.log(items);
+
+  const items1 = [
     { name: "Special Jellof Rice", price: "N4,500" },
     { name: "Special Jellof Rice", price: "N4,500" },
     { name: "Special Jellof Rice", price: "N4,500" },
@@ -53,7 +58,7 @@ const OrderDetails = () => {
             Items
           </p>
           <div className="flex flex-col items-center justify-between mt-2">
-            {items.map((el) => (
+            {items1.map((el) => (
               <div
                 className="flex items-center justify-between"
                 style={{ width: "100%" }}

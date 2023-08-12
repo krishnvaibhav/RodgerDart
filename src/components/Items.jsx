@@ -1,47 +1,91 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import discountimg from "../assets/discountcode.png";
 import { AppContext } from "../context/appContext";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 const Items = () => {
-  const items = [
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: 27000.0,
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: 27000.0,
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: 27000.0,
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: 27000.0,
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: 27000.0,
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: 27000.0,
-    },
-  ];
+  const [Items, setItems] = useState([]);
+  const [Food, setFood] = useState([]);
+  const [Price, SetPrice] = useState({});
 
-  const totalAmount = items.reduce((total, item) => total + item.price, 0);
+  const loadData = async () => {
+    const q = query(
+      collection(db, "cart"),
+      where("uid", "==", auth.currentUser.uid)
+    );
+    const data = [];
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot.docs);
+    querySnapshot.forEach((doc) => {
+      data.push(doc.data().items);
+    });
+    setItems(data);
+  };
+
+  const loadFood = async (list) => {
+    const items = await Promise.all(
+      list[0].map(async (el) => {
+        const docRef = doc(db, "item", el.trim());
+        const docSnap = await getDoc(docRef);
+        return docSnap.data();
+      })
+    );
+    setFood(items);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    if (Items.length > 0) {
+      loadFood(Items);
+    }
+  }, [Items]);
+
+  useEffect(() => {
+    if (Food.length > 0) {
+      const totalAmount = Food.reduce(
+        (total, item) => total + parseInt(item.price),
+        0
+      );
+      const deliverFee = 1500;
+      const serviceFee = 1500;
+      const VAT = 1500;
+      const discount = 100;
+      const finalTotal = totalAmount + deliverFee + serviceFee + VAT - discount;
+
+      setPrice({
+        totalAmount,
+        deliverFee,
+        serviceFee,
+        VAT,
+        discount,
+        finalTotal,
+      });
+    }
+  }, [Food]);
+
+  const totalAmount = Food.reduce(
+    (total, item) => total + parseInt(item.price),
+    0
+  );
+  // CHange according to need
   const deliverFee = 1500;
   const serviceFee = 1500;
   const VAT = 1500;
   const discount = 100;
   const finalTotal = totalAmount + deliverFee + serviceFee + VAT - discount;
+
+  console.log(totalAmount);
 
   const { price, setPrice } = useContext(AppContext);
   useEffect(() => {
@@ -61,16 +105,16 @@ const Items = () => {
         <div>
           <p style={{ fontSize: 15, fontWeight: 500 }}>Items</p>
         </div>
-        {items.map((el, index) => (
+        {Food.map((el, index) => (
           <div>
             <div key={index} className="mt-2 flex items-center justify-between">
               <div>
-                <p style={{ fontSize: 14, fontWeight: 400 }}>{el.item}</p>
+                <p style={{ fontSize: 14, fontWeight: 400 }}>{el.name}</p>
                 <p style={{ color: "#A4AAAD", fontSize: 10 }}>{el.details}</p>
               </div>
               <div>
                 <p style={{ color: "#455A64" }}>
-                  {"N" + el.price.toLocaleString()}
+                  {"N" + parseInt(el.price).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -93,7 +137,7 @@ const Items = () => {
           <hr />
           <div className="flex items-center justify-between p-2">
             <div>
-              <p style={{ fontSize: 12 }}>Sub Toatal ({items.length} items)</p>
+              <p style={{ fontSize: 12 }}>Sub Toatal ({Food.length} items)</p>
             </div>
             <p style={{ fontSize: 12 }}>{"N" + totalAmount.toLocaleString()}</p>
           </div>

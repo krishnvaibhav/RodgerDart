@@ -35,6 +35,7 @@ const TipScreen = () => {
       price: price,
       tip: final / 100 - price.finalTotal,
       uid: auth.currentUser.uid,
+      // change
       items: {
         1: "Jcx8hJlYnWRq9trICfsZ",
         2: "Vfz3tGi0tgYsTfu7qq28",
@@ -50,6 +51,8 @@ const TipScreen = () => {
   }, []);
 
   const { price } = useContext(AppContext);
+
+  console.log(price);
 
   const [selectedTip, setSelectedTip] = useState(null);
   const [customTip, setCustomTip] = useState("");
