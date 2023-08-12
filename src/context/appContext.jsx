@@ -11,9 +11,20 @@ const AppProvider = (props) => {
 
   const [tip, setTip] = useState("");
 
+  const [items, setItems] = useState({});
+
   return (
     <AppContext.Provider
-      value={{ price, setPrice, address, setAddress, tip, setTip }}
+      value={{
+        price,
+        setPrice,
+        address,
+        setAddress,
+        tip,
+        setTip,
+        items,
+        setItems,
+      }}
     >
       {props.children}
     </AppContext.Provider>

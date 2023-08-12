@@ -97,7 +97,7 @@ const BillCheckOut = () => {
   const context = useContext(AppContext);
 
   const selectedAddress = context.address;
-  console.log(selectedAddress);
+  // console.log(selectedAddress);
 
   const handleRadioChange = (option) => {
     setSelectedOption(option);

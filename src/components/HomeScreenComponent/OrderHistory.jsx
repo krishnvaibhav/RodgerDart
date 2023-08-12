@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ongoinimg from "../../assets/ongoinghistoryimg.png";
 import BottomContainer from "./BottomContainer";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { AppContext } from "../../context/appContext";
 
 const OrderHistory = () => {
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
@@ -33,118 +34,92 @@ const OrderHistory = () => {
 
   const [doneList, setDoneList] = useState([]);
   const [ongoingList, setOngoingList] = useState([]);
+  const [orderDoneList, setOrderDoneList] = useState([]);
   const [ongoingOrder, setOngoingOrder] = useState([]);
+  const [doneOrder, setDoneOrder] = useState([]);
+  const [vid, setVid] = useState("");
+  const [vendor, setVendor] = useState([]);
 
   const loadDoneData = async () => {
-    try {
-      const q = query(collection(db, "orders"), where("completed", "==", true));
-      const querySnapshot = await getDocs(q);
-
-      const doneData = querySnapshot.docs.map((doc) => doc.data().items);
-
-      const data = [];
-
-      if (doneData.length > 0 && doneData[0].length > 0) {
-        doneData[0].map(async (el) => {
-          try {
-            data.push(el);
-
-            const docRef = doc(db, "item", el);
-            const docSnap = await getDoc(docRef);
-          } catch (error) {
-            console.error("Error fetching item:", error);
-          }
-        });
-        setDoneList(data);
-      } else {
-        console.log("No completed orders or items found.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    const q = query(collection(db, "orders"), where("completed", "==", true));
+    const querySnapshot = await getDocs(q);
+    const doneData = [];
+    const vidList = [];
+    querySnapshot.forEach((doc) => {
+      doneData.push(doc.data());
+      vidList.push(doc.data().vid);
+    });
+    setVid(vidList);
+    setOrderDoneList(doneData);
   };
-
-  // Call the function to load data
 
   const loadOngoingData = async () => {
     const q = query(collection(db, "orders"), where("completed", "==", false));
 
     const querySnapshot = await getDocs(q);
     const doneData = [];
+    const vidList = [];
     querySnapshot.forEach((doc) => {
       doneData.push(doc.data());
+      vidList.push(doc.data().vid);
     });
+    setVid(vidList);
     setOngoingList(doneData);
   };
 
-  const loadDoneOrder = async () => {};
+  useEffect(() => {
+    console.log(ongoingList);
+  }, [ongoingList]);
+
+  useEffect(() => {
+    console.log(orderDoneList);
+  }, [orderDoneList]);
 
   useEffect(() => {
     loadDoneData();
     loadOngoingData();
   }, []);
 
-  useEffect(() => {
-    console.log(doneList);
-    const fetchItemData = async () => {
-      try {
-        const itemPromises = doneList.map(async (el) => {
-          console.log(`fetching ${el}`);
-          const docRef = doc(db, "item", el);
-          const docSnap = await getDoc(docRef);
-          return docSnap.data();
-        });
-        const itemData = await Promise.all(itemPromises);
-        console.log("Item data:", itemData);
-      } catch (error) {
-        console.error("Error fetching items:", error);
+  const loadDoneItem = async () => {
+    const food = [];
+    for (const id of doneList) {
+      const docRef = doc(db, "item", id.trim());
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        food.push(docSnap.data());
+      } else {
+        console.log("No such document!");
       }
-    };
-
-    if (doneList.length > 0) {
-      fetchItemData();
     }
+    setDoneOrder(food);
+  };
+
+  useEffect(() => {
+    loadDoneItem();
   }, [doneList]);
 
-  const orderList = [
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: "N27,000.00",
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: "N27,000.00",
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: "N27,000.00",
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: "N27,000.00",
-    },
-    {
-      item: "Mordern Light Cloths",
-      details: "small, black, cotton",
-      price: "N27,000.00",
-    },
-  ];
+  const { setItems } = useContext(AppContext);
 
-  // const orderList = [];
+  useEffect(() => {
+    console.log("doneOrder");
+    console.log(doneOrder);
+    setItems(doneOrder);
+  }, []);
 
   const navigate = useNavigate();
+
+  const [activeTab, setActiveTab] = useState("ongoing");
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
 
   return (
     <div
       style={{
-        height: "100vh", // Set the height of the container to fill the viewport
-        overflowY: "hidden", // Hide vertical scrollbar for the entire container
-        position: "relative", // Set position to relative for the fixed top bar
-        paddingTop: "40px", // Add padding to create space for the TopBar
+        height: "100vh",
+        overflowY: "hidden",
+        position: "relative",
+        paddingTop: "40px",
       }}
     >
       <TopBar
@@ -152,16 +127,16 @@ const OrderHistory = () => {
         cart={Icon.cartIc}
         width={deviceWidth}
         style={{
-          position: "fixed", // Set position to fixed to make the top bar fixed
-          top: 0, // Place the top bar at the top of the viewport
-          width: "100%", // Set the width to span the entire viewport
+          position: "fixed",
+          top: 0,
+          width: "100%",
         }}
       />
       <div
         style={{
-          height: "calc(100vh - 120px)", // Calculate the height of the scrollable content area (subtract the height of the TopBar and BottomContainer)
-          overflowY: "scroll", // Enable vertical scrolling for the content area
-          paddingBottom: "20px", // Add padding to create space for the BottomContainer
+          height: "calc(100vh - 120px)",
+          overflowY: "scroll",
+          paddingBottom: "20px",
         }}
       >
         <div className="p-4 pb-1 item-center">
@@ -176,6 +151,7 @@ const OrderHistory = () => {
                 style={{
                   borderBottom: "1px solid #B10000",
                 }}
+                onClick={() => handleTabClick("ongoing")}
               >
                 Ongoing
               </button>
@@ -184,75 +160,152 @@ const OrderHistory = () => {
                 style={{
                   borderBottom: "1px solid black",
                 }}
+                onClick={() => handleTabClick("completed")}
               >
                 Completed
               </button>
             </div>
           </div>
-          <div
-            className={`flex flex-col items-center ${
-              orderList.length === 0 ? "justify-around" : ""
-            }`}
-            style={{ height: "78%", overflowY: "scroll" }}
-          >
-            {orderList.length === 0 ? (
-              <>
-                <img src={ongoinimg} alt="" />
-                <p style={{ color: "#7E7E7E", fontSize: 20, fontWeight: 400 }}>
-                  You have no ongoing order
-                </p>
-                <button
-                  className="p-3 text-white w-60 rounded"
-                  style={{ backgroundColor: "#B10000" }}
-                >
-                  Order Now
-                </button>
-              </>
-            ) : (
-              orderList.map((el, index) => (
-                <div key={index} style={{ width: "100%" }} className="p-3">
-                  <div className="mt-2 flex items-center justify-between">
-                    <div>
-                      <p style={{ fontSize: 16, fontWeight: 600 }}>{el.item}</p>
-                      <p
-                        style={{
-                          color: "#868686",
-                          fontSize: 16,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {el.details}
-                      </p>
+          {activeTab === "ongoing" && (
+            <div
+              className={`flex flex-col items-center ${
+                ongoingList.length === 0 ? "justify-around" : ""
+              }`}
+              style={{ height: "78%", overflowY: "scroll" }}
+            >
+              {ongoingList.length === 0 ? (
+                <>
+                  <img src={ongoinimg} alt="" />
+                  <p
+                    style={{ color: "#7E7E7E", fontSize: 20, fontWeight: 400 }}
+                  >
+                    You have no ongoing order
+                  </p>
+                  <button
+                    className="p-3 text-white w-60 rounded"
+                    style={{ backgroundColor: "#B10000" }}
+                  >
+                    Order Now
+                  </button>
+                </>
+              ) : (
+                ongoingList.map((el, index) => (
+                  <div key={index} style={{ width: "100%" }} className="p-3">
+                    <div className="mt-2 flex items-center justify-between">
+                      <div>
+                        <p style={{ fontSize: 16, fontWeight: 600 }}>
+                          {el.vendor}
+                        </p>
+                        <p
+                          style={{
+                            color: "#868686",
+                            fontSize: 16,
+                            fontWeight: 600,
+                          }}
+                        >
+                          {/* {el.details} */}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end justify-end">
+                        <p
+                          style={{
+                            color: "#868686",
+                            fontSize: 12,
+                            fontWeight: 500,
+                          }}
+                        >
+                          {el.price.finalTotal + el.tip}
+                        </p>
+                        <p
+                          onClick={() => {
+                            navigate("/orderdetails");
+                          }}
+                          style={{
+                            color: "#B10000",
+                            fontSize: 12,
+                            fontWeight: 500,
+                          }}
+                        >
+                          View Order Details
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-end justify-end">
-                      <p
-                        style={{
-                          color: "#868686",
-                          fontSize: 12,
-                          fontWeight: 500,
-                        }}
-                      >
-                        {el.price}
-                      </p>
-                      <p
-                        onClick={() => {
-                          navigate("/orderdetails");
-                        }}
-                        style={{
-                          color: "#B10000",
-                          fontSize: 12,
-                          fontWeight: 500,
-                        }}
-                      >
-                        View Order Details
-                      </p>
-                    </div>
+                    <hr />
                   </div>
-                  <hr />
-                </div>
-              ))
-            )}
-          </div>
+                ))
+              )}
+            </div>
+          )}
+          {activeTab === "completed" && (
+            <div
+              className={`flex flex-col items-center ${
+                orderDoneList.length === 0 ? "justify-around" : ""
+              }`}
+              style={{ height: "78%", overflowY: "scroll" }}
+            >
+              {orderDoneList.length === 0 ? (
+                <>
+                  <img src={ongoinimg} alt="" />
+                  <p
+                    style={{ color: "#7E7E7E", fontSize: 20, fontWeight: 400 }}
+                  >
+                    You have no ongoing order
+                  </p>
+                  <button
+                    className="p-3 text-white w-60 rounded"
+                    style={{ backgroundColor: "#B10000" }}
+                  >
+                    Order Now
+                  </button>
+                </>
+              ) : (
+                orderDoneList.map((el, index) => (
+                  <div key={index} style={{ width: "100%" }} className="p-3">
+                    <div className="mt-2 flex items-center justify-between">
+                      <div>
+                        <p style={{ fontSize: 16, fontWeight: 600 }}>
+                          {el.vendor}
+                        </p>
+                        <p
+                          style={{
+                            color: "#868686",
+                            fontSize: 16,
+                            fontWeight: 600,
+                          }}
+                        >
+                          {/* {el.details} */}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end justify-end">
+                        <p
+                          style={{
+                            color: "#868686",
+                            fontSize: 12,
+                            fontWeight: 500,
+                          }}
+                        >
+                          {el.price.finalTotal + el.tip}
+                        </p>
+                        <p
+                          onClick={() => {
+                            navigate("/orderdetails");
+                          }}
+                          style={{
+                            color: "#B10000",
+                            fontSize: 12,
+                            fontWeight: 500,
+                          }}
+                        >
+                          View Order Details
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </div>
       <BottomContainer width={deviceWidth} />
