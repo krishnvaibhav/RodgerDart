@@ -37,7 +37,7 @@ const MainCards = (props) => {
     <div className="mr-4">
       <div className="relative">
         <div
-          className="rounded-full absolute bg-white p-1 right-0 "
+          className="rounded-full absolute bg-white p-1 right-1"
           onClick={() => {
             setFavItem(!favItem);
             performNotification();
@@ -69,7 +69,7 @@ const MainCards = (props) => {
         </button>
       </div>
       <div className="flex flex-col">
-        <h2 className=" font-semibold text-base ">{cTitle}</h2>
+        <h2 className=" font-semibold text-sm ">{cTitle}</h2>
         <div className="flex flex-row space-x-2">
           <img src={Icon.RatingIcon} alt="" />
           <p className="text-sm font-thin">{props.rating}</p>

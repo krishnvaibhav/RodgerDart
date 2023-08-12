@@ -4,7 +4,7 @@ import SearchBar from "./HomeScreenComponent/SearchBar";
 import WelcomeCard from "./HomeScreenComponent/WelcomeCard";
 import OfferScreen from "./HomeScreenComponent/OfferScreen";
 import CategoryScreen from "./HomeScreenComponent/CategoryScreen";
-import MainCardScreen from "./HomeScreenComponent/MainCardScreen";
+import StoreScreenCard from "./StoreScreenCard";
 import BottomContainer from "./HomeScreenComponent/BottomContainer";
 import Icon from "./HomeScreenComponent/ImagePath";
 
@@ -59,11 +59,7 @@ const Restuarants = () => {
           >
             <SearchBar width={width} />
             <CategoryScreen width={width} />
-            <MainCardScreen title="Eatery" />
-            <MainCardScreen title="Gffts" />
-            <MainCardScreen title="Grocery" />
-            <MainCardScreen title="Pastries" />
-            <MainCardScreen title="Pharmacy" />
+            <StoreScreenCard title="Eatery" />
           </div>
         </div>
       </div>

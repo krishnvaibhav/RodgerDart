@@ -63,7 +63,8 @@ const RestuarantCardScreen = ({ props }) => {
 
   const getFilteredItems = () => {
     if (cardItem && itemID) {
-      return cardItem.filter((item) => item.vid === itemID);
+      const cartFil = cardItem.filter((item) => item.type === "eatery");
+      return cartFil.filter((item) => item.vid === itemID);
     }
     return [];
   };

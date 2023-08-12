@@ -25,45 +25,6 @@ const RestuarantCardScreen = ({ navigate }) => {
   }, []);
   const width = useRef(deviceWidth / 2 + deviceWidth / 3);
 
-  const items = [
-    {
-      key: "1",
-      price: "N300",
-      image: "",
-      foodName: "MegaChicken",
-    },
-    {
-      key: "2",
-      price: "N300",
-      image: "",
-      foodName: "ChickenRepublic",
-    },
-    {
-      key: "3",
-      price: "N300",
-      image: "",
-      foodName: "Chicken Chuka",
-    },
-    {
-      key: "4",
-      price: "N300",
-      image: "",
-      foodName: "Chicken Blah7",
-    },
-    {
-      key: "5",
-      price: "N300",
-      image: "",
-      foodName: "Chicken Chuka5",
-    },
-    {
-      key: "6",
-      price: "N300",
-      image: "",
-      foodName: "Chicken Blah",
-    },
-  ];
-
   return (
     <div
       style={{
