@@ -10,14 +10,16 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const CartScreen = (props) => {
   const [cartId, setCartId] = useState([]);
   const cartRef = doc(db, "cart", auth.currentUser.uid);
   const itemRef = collection(db, "item");
   const [savedItems, setSavedItems] = useState([]);
+  const [price, setPrice] = useState(null);
+  const navigate = useNavigate();
 
   getDocs(itemRef).then((snapshot) => {
     let user = auth.currentUser.uid;
@@ -32,95 +34,60 @@ const CartScreen = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const snapshot = await getDocs(cartRef);
-      snapshot.docs.forEach((items) => {
-        console.log(items.data());
+      const snapshot = await getDoc(cartRef);
+      let totalPrice = 0;
+
+      savedItems.forEach((item) => {
+        totalPrice += parseFloat(item.price);
       });
+
+      if (snapshot.exists()) {
+        setCart(snapshot.data().item_id);
+        setPrice(totalPrice);
+      }
     };
 
     fetchData();
 
-    console.log(cart);
-  }, [cartId]);
-
-  const handleIncrement = (index) => {
-    const updatedCartItems = [...cart.items];
-    updatedCartItems[index].numberOf += 1;
-
-    // Update the quantity in Firestore
-    const itemDocRef = doc(
-      db,
-      "users",
-      auth.currentUser.uid,
-      "cart",
-      cartId[index]
-    );
-    updateDoc(itemDocRef, { quantity: updatedCartItems[index].numberOf });
-
-    setCart({ items: updatedCartItems });
-  };
-
-  const handleDecrement = (index) => {
-    if (cart.items[index].numberOf > 1) {
-      const updatedCartItems = [...cart.items];
-      updatedCartItems[index].numberOf -= 1;
-
-      const itemDocRef = doc(
-        db,
-        "users",
-        auth.currentUser.uid,
-        "cart",
-        cartId[index]
-      );
-      updateDoc(itemDocRef, { quantity: updatedCartItems[index].numberOf });
-
-      setCart({ items: updatedCartItems });
-    }
-  };
+    // console.log(cart);
+  }, [cartId, savedItems]);
 
   useEffect(() => {
-    const fetchSavedItems = async () => {
+    const fetchItemData = async () => {
       try {
-        const itemsCollection = collection(db, "item");
-
-        // Read all documents in the "items" collection using getDocs
-        const querySnapshot = await getDocs(itemsCollection);
-
-        const savedItemsData = [];
-
-        querySnapshot.forEach((itemDoc) => {
-          cart.forEach((userCart) => {
-            userCart.cartItem.forEach((cartItem) => {
-              console.log();
-              console.log(itemDoc.id);
-              if (itemDoc.id === cartItem.id) {
-                savedItemsData.push({
-                  itemId: 0,
-                  name: itemDoc.data().name,
-                  descricption: itemDoc.data().descricption,
-                  price: itemDoc.data().price,
-                  quant: itemDoc.data().quant,
-                  rating: itemDoc.data().rating,
-                  type: itemDoc.data().type,
-                  vid: itemDoc.data().vid,
-                  // Add other item details you want to save
-                });
-              }
-            });
-          });
-        });
-
-        setSavedItems(savedItemsData);
-        console.log(savedItemsData);
+        const snapshot = await getDocs(itemRef);
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          description: doc.data().description,
+          price: doc.data().price,
+          quant: doc.data().quant,
+          type: doc.data().type,
+          rating: doc.data().rating,
+          vid: doc.data().vid,
+        }));
+        setSavedItems(data);
       } catch (error) {
-        console.error("Error fetching saved items:", error);
+        // console.error("Error fetching item data:", error);
       }
     };
 
-    fetchSavedItems();
-
-    console.log(savedItems);
+    fetchItemData();
   }, [cart]);
+
+  useEffect(() => {
+    let totalPrice = 0;
+
+    savedItems.forEach((item) => {
+      totalPrice += parseFloat(item.price);
+    });
+
+    setPrice(totalPrice);
+  }, [savedItems]);
+
+  useEffect(() => {
+    console.log(savedItems);
+  }, [savedItems]);
 
   return (
     <div>
@@ -180,9 +147,9 @@ const CartScreen = (props) => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="pt-12">
           {savedItems.map((item, key) => (
-            <div key={key} className="flex flex-col pt-20 pl-10 space-y-20">
+            <div key={key} className="flex flex-col pl-10">
               <div className="flex space-x-4">
                 <img className="w-24" src={Icon.FoodImage} />
                 <div
@@ -203,36 +170,87 @@ const CartScreen = (props) => {
                   </p>
                   <h2 className="font-semibold">N{item.price}</h2>
                 </div>
-                <div className="flex flex-col space-y-10">
+                <div className="flex flex-col">
                   <div className="flex items-center">
                     <RxCrossCircled size={16} color="#CD0B17" />
                   </div>
-                  <div
-                    className="flex space-x-5"
-                    style={{
-                      backgroundColor: "#F3CCCC",
-                      borderRadius: 3,
-                    }}
-                  >
-                    <div style={{ backgroundColor: "#FDF8F8" }}>
-                      <button onClick={() => handleDecrement(key)}>-</button>
-                    </div>
-                    <h2 className="text-black">{item.quant}</h2>
-                    <div style={{ backgroundColor: "#FDF8F8" }}>
-                      <button onClick={() => handleIncrement(key)}>+</button>
-                    </div>
-                  </div>
                 </div>
+              </div>
+              <div className="my-2 pr-8">
+                <hr />
               </div>
             </div>
           ))}
-          <Button
-            onClick={() => {
-              console.log(cart);
-            }}
-          >
-            click
-          </Button>
+          <div className="flex flex-col px-8">
+            <div>
+              <h1 className="text-lg font-semibold">Payment Summary</h1>
+            </div>
+            <div>
+              <h2>Discount Code</h2>
+              <div
+                className="flex flex-row space-x-2"
+                style={{
+                  width: "100%",
+                  height: "20%",
+                  alignItems: "center",
+                }}
+              >
+                <input
+                  style={{
+                    border: "1px solid #EBEBEB",
+                    width: "60%",
+                    height: "20%",
+                    padding: "10px",
+                  }}
+                  type="text"
+                  placeholder="Enter Voucher"
+                />
+                <button>
+                  <p
+                    style={{
+                      color: "#B10000",
+                      fontSize: "14px",
+                    }}
+                  >
+                    Apply discount
+                  </p>
+                </button>
+              </div>
+              <div>
+                <div className="flex flex-row justify-between pt-2">
+                  <h3 color="#7B7A7A">Subtotal</h3>
+                  <h3 color="#636161">N{price}</h3>
+                </div>
+                <div className="flex flex-row justify-between pt-2">
+                  <h3 color="#7B7A7A">Service Fee</h3>
+                  <h3 color="#636161">N5000</h3>
+                </div>
+                <div className="flex flex-row justify-between pt-2">
+                  <h3 color="#7B7A7A">Vat</h3>
+                  <h3 color="#636161">N200</h3>
+                </div>
+                <div
+                  className="content-center flex justify-center rounded-md"
+                  style={{
+                    width: "100%",
+                    height: 40,
+                    backgroundColor: "#B10000",
+                    color: "#FFFF",
+                    marginTop: 20,
+                    fontSize: 14,
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      navigate("/checkout");
+                    }}
+                  >
+                    <p>Proceed to Checkout</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
