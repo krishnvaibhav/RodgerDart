@@ -69,7 +69,7 @@ const TipScreen = () => {
   const config = {
     email: email,
     amount: final,
-    publicKey: "pk_test_f44835512bf5938d1b140f16fccad5647fe56d19",
+    publicKey: "",
   };
 
   const onSuccess = (reference) => {

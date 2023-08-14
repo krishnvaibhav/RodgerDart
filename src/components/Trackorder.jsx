@@ -25,7 +25,7 @@ const Trackorder = () => {
       <div style={mapStyles}>
         <GoogleMapReact
           bootstrapURLKeys={{
-            key: "AIzaSyDesOie1K0-Ho2y_Aj35-FNI8L2Jk8P-qg",
+            key: "",
           }}
           defaultCenter={defaultProps.center}
           defaultZoom={defaultProps.zoom}
